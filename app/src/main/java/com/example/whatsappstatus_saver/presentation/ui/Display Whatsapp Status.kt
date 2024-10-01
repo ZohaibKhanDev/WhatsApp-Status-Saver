@@ -1,5 +1,6 @@
 package com.example.whatsappstatus_saver.presentation.ui
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Environment
@@ -10,15 +11,26 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Send
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import java.io.File
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DisplayWhatsAppStatuses() {
     val statuses = remember { mutableStateListOf<File>() }
@@ -43,30 +55,57 @@ fun DisplayWhatsAppStatuses() {
         }
     }
 
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
-        items(statuses) { statusFile ->
-            when (statusFile.extension) {
-                "jpg" -> {
-                    val bitmap = loadImageBitmap(statusFile)
-                    if (bitmap != null) {
-                        Image(
-                            bitmap = bitmap.asImageBitmap(),
-                            contentDescription = "WhatsApp Status Image",
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(200.dp)
-                        )
+    Scaffold(
+        topBar = {
+            TopAppBar(title = {
+                Text(
+                    text = "Status Saver",
+                    color = Color.White,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Medium
+                )
+            }, actions = {
+                Icon(imageVector = Icons.Filled.Send, contentDescription = "", tint = Color.White)
+                Spacer(modifier = Modifier.width(12.dp))
+                Icon(
+                    imageVector = Icons.Filled.Warning,
+                    contentDescription = "",
+                    tint = Color.White
+                )
+            }, colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0XFF008069)))
+        },
+    ) {
+        LazyColumn(modifier = Modifier
+            .fillMaxSize()
+            .padding(top = it.calculateTopPadding())) {
+            items(statuses) { statusFile ->
+                when (statusFile.extension) {
+                    "jpg" -> {
+                        val bitmap = loadImageBitmap(statusFile)
+                        if (bitmap != null) {
+                            Image(
+                                bitmap = bitmap.asImageBitmap(),
+                                contentDescription = "WhatsApp Status Image",
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(200.dp)
+                            )
+                        }
                     }
-                }
-                "mp4" -> {
-                    Text("Video: ${statusFile.name}", modifier = Modifier.padding(8.dp))
-                }
-                "mp3", "opus" -> {
-                    AudioFileItem(statusFile)
+
+                    "mp4" -> {
+                        Text("Video: ${statusFile.name}", modifier = Modifier.padding(8.dp))
+                    }
+
+                    "mp3", "opus" -> {
+                        AudioFileItem(statusFile)
+                    }
                 }
             }
         }
     }
+
+
 }
 
 @Composable
