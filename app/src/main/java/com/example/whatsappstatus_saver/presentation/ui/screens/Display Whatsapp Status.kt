@@ -1,4 +1,4 @@
-package com.example.whatsappstatus_saver.presentation.ui
+package com.example.whatsappstatus_saver.presentation.ui.screens
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap

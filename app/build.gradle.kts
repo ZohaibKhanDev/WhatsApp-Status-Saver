@@ -66,6 +66,10 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    implementation("com.google.accompanist:accompanist-permissions:0.32.0")
+    implementation ("com.google.accompanist:accompanist-permissions:0.32.0")
+
+    val nav_version = "2.8.1"
+
+    implementation("androidx.navigation:navigation-compose:$nav_version")
 
 }

@@ -3,26 +3,22 @@ package com.example.whatsappstatus_saver
 import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.database.ContentObserver
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import android.os.Handler
-import android.os.Looper
 import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.example.whatsappstatus_saver.presentation.ui.WhatsAppStatusScreen
+import com.example.whatsappstatus_saver.presentation.ui.screens.WhatsAppStatusScreen
 import com.example.whatsappstatus_saver.ui.theme.WhatsAppStatusSaverTheme
 import java.io.File
 
