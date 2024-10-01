@@ -25,6 +25,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
 import com.example.whatsappstatus_saver.presentation.ui.StatusScreen
+import com.example.whatsappstatus_saver.presentation.ui.WhatsAppStatusScreen
 import com.example.whatsappstatus_saver.ui.theme.WhatsAppStatusSaverTheme
 import java.io.File
 
@@ -56,7 +57,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             WhatsAppStatusSaverTheme {
-                StatusScreen(photosItems)
+                WhatsAppStatusScreen()
             }
         }
 
@@ -124,8 +125,8 @@ class MainActivity : ComponentActivity() {
             "%Android/media/com.whatsapp/WhatsApp/Media/.Statuses%"
         )
 
-        val selection = MediaStore.Images.Media.RELATIVE_PATH + " LIKE ? OR " +
-                MediaStore.Images.Media.RELATIVE_PATH + " LIKE ?"
+        val selection = "${MediaStore.Images.Media.RELATIVE_PATH} LIKE ? OR " +
+                "${MediaStore.Images.Media.RELATIVE_PATH} LIKE ?"
 
         val cursor = context.contentResolver.query(
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
@@ -151,8 +152,8 @@ class MainActivity : ComponentActivity() {
         Log.d("MainActivity", "Fetched Statuses: $mediaList")
         return mediaList
     }
-}
 
+}
 
 
 inline fun permissionGaranted(context: Context, permission: String, call: (Boolean) -> Unit) {

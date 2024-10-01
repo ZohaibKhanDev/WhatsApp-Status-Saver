@@ -81,7 +81,7 @@ fun StatusItem(statusPath: String) {
     val imageBitmap = remember(statusPath) {
         loadImageBitmap(statusPath)
     }
-    Log.d("StatusItem", "Displaying status: $statusPath")
+    Log.d("StatusItem", "Displaying status: $imageBitmap")
     if (imageBitmap != null) {
         Image(
             bitmap = imageBitmap,
