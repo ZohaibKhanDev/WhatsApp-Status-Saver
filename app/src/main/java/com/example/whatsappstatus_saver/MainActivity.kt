@@ -24,7 +24,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
-import com.example.whatsappstatus_saver.presentation.ui.StatusScreen
 import com.example.whatsappstatus_saver.presentation.ui.WhatsAppStatusScreen
 import com.example.whatsappstatus_saver.ui.theme.WhatsAppStatusSaverTheme
 import java.io.File
@@ -104,14 +103,6 @@ class MainActivity : ComponentActivity() {
     }
 
 
-    private fun scanMedia() {
-        val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
-        val file = File(Environment.getExternalStorageDirectory().toString())
-        val uri = Uri.fromFile(file)
-        intent.data = uri
-        sendBroadcast(intent)
-    }
-
 
     fun getWhatsAppStatusList(context: Context): List<String> {
         val mediaList = mutableListOf<String>()
@@ -153,16 +144,4 @@ class MainActivity : ComponentActivity() {
         return mediaList
     }
 
-}
-
-
-inline fun permissionGaranted(context: Context, permission: String, call: (Boolean) -> Unit) {
-    if (ContextCompat.checkSelfPermission(
-            context, permission
-        ) == PackageManager.PERMISSION_GRANTED
-    ) {
-        call.invoke(true)
-    } else {
-        call.invoke(false)
-    }
 }

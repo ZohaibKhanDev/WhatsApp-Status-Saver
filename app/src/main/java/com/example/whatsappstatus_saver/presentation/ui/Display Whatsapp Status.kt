@@ -62,3 +62,4 @@ fun DisplayWhatsAppStatuses() {
 fun loadImageBitmap(file: File): Bitmap? {
     return BitmapFactory.decodeFile(file.absolutePath)
 }
+
