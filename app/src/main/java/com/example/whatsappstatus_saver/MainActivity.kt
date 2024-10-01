@@ -37,7 +37,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
         manageExternalStorageResultLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result ->
@@ -45,6 +44,7 @@ class MainActivity : ComponentActivity() {
                 photosItems = getWhatsAppStatusList(applicationContext)
             }
         }
+
 
         permissionRequestLauncher = registerForActivityResult(
             ActivityResultContracts.RequestPermission()
@@ -60,24 +60,26 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+
         requestStoragePermission()
     }
+
 
     private fun requestStoragePermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             if (Environment.isExternalStorageManager()) {
                 photosItems = getWhatsAppStatusList(applicationContext)
             } else {
-                val intent =
-                    Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION).apply {
-                        data = Uri.parse("package:${packageName}")
-                    }
+                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION).apply {
+                    data = Uri.parse("package:${packageName}")
+                }
                 manageExternalStorageResultLauncher.launch(intent)
             }
         } else {
             permissionRequestLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
         }
     }
+
 
     private val contentObserver = object : ContentObserver(Handler(Looper.getMainLooper())) {
         override fun onChange(selfChange: Boolean) {
@@ -100,6 +102,7 @@ class MainActivity : ComponentActivity() {
         contentResolver.unregisterContentObserver(contentObserver)
     }
 
+
     private fun scanMedia() {
         val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
         val file = File(Environment.getExternalStorageDirectory().toString())
@@ -107,6 +110,7 @@ class MainActivity : ComponentActivity() {
         intent.data = uri
         sendBroadcast(intent)
     }
+
 
     fun getWhatsAppStatusList(context: Context): List<String> {
         val mediaList = mutableListOf<String>()
@@ -135,15 +139,20 @@ class MainActivity : ComponentActivity() {
             val dataColumn = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA)
             while (cursor.moveToNext()) {
                 val filePath = cursor.getString(dataColumn)
-                Log.d("MainActivity", "WhatsApp Status Found: $filePath")
-                mediaList.add(filePath)
+                val file = File(filePath)
+                if (file.exists()) {
+                    Log.d("MainActivity", "WhatsApp Status Found: $filePath")
+                    mediaList.add(filePath)
+                } else {
+                    Log.e("MainActivity", "File does not exist: $filePath")
+                }
             }
         }
         Log.d("MainActivity", "Fetched Statuses: $mediaList")
         return mediaList
     }
-
 }
+
 
 
 inline fun permissionGaranted(context: Context, permission: String, call: (Boolean) -> Unit) {

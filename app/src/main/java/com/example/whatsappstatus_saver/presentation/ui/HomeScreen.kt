@@ -46,7 +46,6 @@ fun StatusScreen(statusItems: List<String>) {
         )
     }
 
-
     if (!hasStoragePermission) {
         PermissionRequest(permission = Manifest.permission.READ_EXTERNAL_STORAGE,
             onPermissionGranted = { hasStoragePermission = it }
