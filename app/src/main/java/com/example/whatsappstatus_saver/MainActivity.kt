@@ -3,7 +3,6 @@ package com.example.whatsappstatus_saver
 import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.database.ContentObserver
 import android.net.Uri
 import android.os.Build
@@ -23,7 +22,6 @@ import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.core.content.ContextCompat
 import com.example.whatsappstatus_saver.presentation.ui.WhatsAppStatusScreen
 import com.example.whatsappstatus_saver.ui.theme.WhatsAppStatusSaverTheme
 import java.io.File
@@ -101,7 +99,6 @@ class MainActivity : ComponentActivity() {
         super.onPause()
         contentResolver.unregisterContentObserver(contentObserver)
     }
-
 
 
     fun getWhatsAppStatusList(context: Context): List<String> {

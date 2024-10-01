@@ -16,8 +16,7 @@ import com.google.accompanist.permissions.rememberPermissionState
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun WhatsAppStatusScreen() {
-    val permissionState =
-        rememberPermissionState(permission = android.Manifest.permission.READ_EXTERNAL_STORAGE)
+    val permissionState = rememberPermissionState(permission = android.Manifest.permission.READ_EXTERNAL_STORAGE)
 
     LaunchedEffect(Unit) {
         permissionState.launchPermissionRequest()
@@ -35,5 +34,3 @@ fun WhatsAppStatusScreen() {
         }
     }
 }
-
-
