@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
         manageExternalStorageResultLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result ->
@@ -42,7 +42,6 @@ class MainActivity : ComponentActivity() {
                 photosItems = getWhatsAppStatusList(applicationContext)
             }
         }
-
 
         permissionRequestLauncher = registerForActivityResult(
             ActivityResultContracts.RequestPermission()
@@ -58,10 +57,8 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-
         requestStoragePermission()
     }
-
 
     private fun requestStoragePermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -77,29 +74,6 @@ class MainActivity : ComponentActivity() {
             permissionRequestLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
         }
     }
-
-
-    private val contentObserver = object : ContentObserver(Handler(Looper.getMainLooper())) {
-        override fun onChange(selfChange: Boolean) {
-            super.onChange(selfChange)
-            photosItems = getWhatsAppStatusList(applicationContext)
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        contentResolver.registerContentObserver(
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-            true,
-            contentObserver
-        )
-    }
-
-    override fun onPause() {
-        super.onPause()
-        contentResolver.unregisterContentObserver(contentObserver)
-    }
-
 
     fun getWhatsAppStatusList(context: Context): List<String> {
         val mediaList = mutableListOf<String>()
@@ -137,8 +111,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-        Log.d("MainActivity", "Fetched Statuses: $mediaList")
         return mediaList
     }
-
 }

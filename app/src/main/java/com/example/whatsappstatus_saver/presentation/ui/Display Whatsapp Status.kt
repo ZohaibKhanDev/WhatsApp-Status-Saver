@@ -60,7 +60,6 @@ fun DisplayWhatsAppStatuses() {
                 }
                 "mp4" -> {
                     Text("Video: ${statusFile.name}", modifier = Modifier.padding(8.dp))
-
                 }
                 "mp3", "opus" -> {
                     AudioFileItem(statusFile)
@@ -72,13 +71,14 @@ fun DisplayWhatsAppStatuses() {
 
 @Composable
 fun AudioFileItem(audioFile: File) {
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .padding(8.dp)
-        .background(Color.Gray)
-        .clickable {
-            Log.d("Audio", "Playing audio: ${audioFile.name}")
-        }
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .background(Color.Gray)
+            .clickable {
+                Log.d("Audio", "Playing audio: ${audioFile.name}")
+            }
     ) {
         Text(
             text = "Audio: ${audioFile.name}",
@@ -88,7 +88,6 @@ fun AudioFileItem(audioFile: File) {
         )
     }
 }
-
 
 fun loadImageBitmap(file: File): Bitmap? {
     return BitmapFactory.decodeFile(file.absolutePath)
