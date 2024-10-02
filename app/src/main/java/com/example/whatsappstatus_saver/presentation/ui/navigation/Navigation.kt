@@ -14,6 +14,7 @@ import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -121,16 +122,20 @@ fun BottomNavigation(navController: NavController) {
                     Icon(
                         imageVector = it.unSelectedIcon,
                         contentDescription = "",
-                        tint = Color.DarkGray
+                        tint = Color(0XFF70a59b)
                     )
                 }
             }, label = {
                 if (current == it.route) {
                     Text(text = it.title, color = Color.White, fontWeight = FontWeight.Medium)
                 } else {
-                    Text(text = it.route, color = Color.DarkGray, fontWeight = FontWeight.Medium)
+                    Text(
+                        text = it.route,
+                        color = Color(0XFF70a59b),
+                        fontWeight = FontWeight.Medium
+                    )
                 }
-            })
+            }, colors = NavigationBarItemDefaults.colors(indicatorColor = Color.Transparent))
         }
     }
 
