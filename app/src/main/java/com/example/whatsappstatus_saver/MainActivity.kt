@@ -18,6 +18,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import com.example.whatsappstatus_saver.presentation.ui.navigation.NavEntry
 import com.example.whatsappstatus_saver.presentation.ui.screens.WhatsAppStatusScreen
 import com.example.whatsappstatus_saver.ui.theme.WhatsAppStatusSaverTheme
 import java.io.File
@@ -49,7 +50,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             WhatsAppStatusSaverTheme {
-                WhatsAppStatusScreen()
+                NavEntry()
             }
         }
 
