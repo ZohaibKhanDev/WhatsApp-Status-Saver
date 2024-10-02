@@ -44,7 +44,7 @@ fun WhatsAppStatusScreen(navController: NavController) {
         topBar = {
             TopAppBar(title = {
                 Text(
-                    text = "Status Saver",
+                    text = "Status Images",
                     color = Color.White,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Medium

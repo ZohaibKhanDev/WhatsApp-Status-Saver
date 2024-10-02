@@ -47,7 +47,6 @@ fun DisplayWhatsAppStatuses() {
 
         if (whatsappStatusFolder.exists()) {
             val statusFiles = whatsappStatusFolder.listFiles { file ->
-                // Include "jpg", "png", and any other formats you want to show
                 file.extension.lowercase() in listOf("jpg", "jpeg", "png", "mp4", "mp3", "opus")
             }
             if (statusFiles != null) {
