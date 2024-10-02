@@ -86,7 +86,7 @@ fun Videos(navController: NavController) {
         topBar = {
             TopAppBar(title = {
                 Text(
-                    text = "Status Saver",
+                    text = "Status Videos",
                     color = Color.White,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Medium
