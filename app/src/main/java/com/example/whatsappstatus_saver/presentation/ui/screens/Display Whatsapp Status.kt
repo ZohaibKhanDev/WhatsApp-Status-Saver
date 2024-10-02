@@ -47,7 +47,8 @@ fun DisplayWhatsAppStatuses() {
 
         if (whatsappStatusFolder.exists()) {
             val statusFiles = whatsappStatusFolder.listFiles { file ->
-                file.extension == "jpg" || file.extension == "mp4" || file.extension == "mp3" || file.extension == "opus"
+                // Include "jpg", "png", and any other formats you want to show
+                file.extension.lowercase() in listOf("jpg", "jpeg", "png", "mp4", "mp3", "opus")
             }
             if (statusFiles != null) {
                 statuses.addAll(statusFiles)
@@ -58,6 +59,7 @@ fun DisplayWhatsAppStatuses() {
             Log.e("WhatsAppStatus", "Folder not found")
         }
     }
+
     LazyVerticalGrid(
         columns = GridCells.Fixed(4),
         modifier = Modifier
@@ -68,8 +70,8 @@ fun DisplayWhatsAppStatuses() {
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         items(statuses) { statusFile ->
-            when (statusFile.extension) {
-                "jpg" -> {
+            when (statusFile.extension.lowercase()) {
+                "jpg", "jpeg", "png" -> {
                     val bitmap = loadImageBitmap(statusFile)
                     if (bitmap != null) {
                         Box(
@@ -103,3 +105,4 @@ fun DisplayWhatsAppStatuses() {
 fun loadImageBitmap(file: File): Bitmap? {
     return BitmapFactory.decodeFile(file.absolutePath)
 }
+
