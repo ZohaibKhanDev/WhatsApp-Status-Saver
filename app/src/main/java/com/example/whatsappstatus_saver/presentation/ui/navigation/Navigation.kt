@@ -29,6 +29,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.whatsappstatus_saver.presentation.ui.screens.Saved
+import com.example.whatsappstatus_saver.presentation.ui.screens.SettingScreen
+import com.example.whatsappstatus_saver.presentation.ui.screens.Videos
 import com.example.whatsappstatus_saver.presentation.ui.screens.WhatsAppStatusScreen
 
 @Composable
@@ -38,14 +41,13 @@ fun Navigation(navController: NavHostController) {
             WhatsAppStatusScreen(navController)
         }
         composable(Screens.VideosScreen.route) {
-
+            Videos(navController = navController)
         }
         composable(Screens.Saved.route) {
-
+            Saved(navController = navController)
         }
-
         composable(Screens.Setting.route) {
-
+            SettingScreen(navController = navController)
         }
     }
 }
@@ -130,9 +132,7 @@ fun BottomNavigation(navController: NavController) {
                     Text(text = it.title, color = Color.White, fontWeight = FontWeight.Medium)
                 } else {
                     Text(
-                        text = it.route,
-                        color = Color(0XFF70a59b),
-                        fontWeight = FontWeight.Medium
+                        text = it.route, color = Color(0XFF70a59b), fontWeight = FontWeight.Medium
                     )
                 }
             }, colors = NavigationBarItemDefaults.colors(indicatorColor = Color.Transparent))

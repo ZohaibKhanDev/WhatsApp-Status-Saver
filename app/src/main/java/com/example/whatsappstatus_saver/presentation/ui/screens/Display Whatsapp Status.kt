@@ -27,6 +27,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -59,20 +60,31 @@ fun DisplayWhatsAppStatuses() {
     }
     LazyVerticalGrid(
         columns = GridCells.Fixed(4),
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 50.dp),
+        contentPadding = PaddingValues(4.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         items(statuses) { statusFile ->
             when (statusFile.extension) {
                 "jpg" -> {
                     val bitmap = loadImageBitmap(statusFile)
                     if (bitmap != null) {
-                        Image(
-                            bitmap = bitmap.asImageBitmap(),
-                            contentDescription = "WhatsApp Status Image",
+                        Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(200.dp)
-                        )
+                                .aspectRatio(1f)
+                        ) {
+                            Image(
+                                bitmap = bitmap.asImageBitmap(),
+                                contentDescription = "WhatsApp Status Image",
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                contentScale = ContentScale.Crop
+                            )
+                        }
                     }
                 }
 
@@ -85,26 +97,6 @@ fun DisplayWhatsAppStatuses() {
                  }*/
             }
         }
-    }
-
-
-}
-
-@Composable
-fun AudioFileItem(audioFile: File) {
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .padding(8.dp)
-        .background(Color.Gray)
-        .clickable {
-            Log.d("Audio", "Playing audio: ${audioFile.name}")
-        }) {
-        Text(
-            text = "Audio: ${audioFile.name}",
-            modifier = Modifier.padding(16.dp),
-            color = Color.White,
-            fontSize = 16.sp
-        )
     }
 }
 
