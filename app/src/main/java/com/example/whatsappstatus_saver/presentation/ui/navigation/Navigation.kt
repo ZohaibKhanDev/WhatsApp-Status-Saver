@@ -61,8 +61,8 @@ sealed class Screens(
     )
 
     object VideosScreen : Screens(
-        "VideosScreen",
-        "VideosScreen",
+        "Videos",
+        "Videos",
         selectedIcon = Icons.Filled.VideoLibrary,
         unSelectedIcon = Icons.Outlined.VideoLibrary
     )
