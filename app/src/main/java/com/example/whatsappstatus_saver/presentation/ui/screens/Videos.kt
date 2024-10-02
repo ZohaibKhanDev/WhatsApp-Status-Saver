@@ -1,9 +1,15 @@
 package com.example.whatsappstatus_saver.presentation.ui.screens
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
+import android.media.ThumbnailUtils
+import android.net.Uri
 import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,16 +32,25 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.media3.common.MediaItem
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.ui.PlayerView
 import androidx.navigation.NavController
 import java.io.File
 
@@ -45,6 +60,7 @@ import java.io.File
 fun Videos(navController: NavController) {
 
     val statuses = remember { mutableStateListOf<File>() }
+    var selectedVideo by remember { mutableStateOf<File?>(null) }
 
     LaunchedEffect(Unit) {
         val whatsappStatusFolder = File(
@@ -70,7 +86,7 @@ fun Videos(navController: NavController) {
         topBar = {
             TopAppBar(title = {
                 Text(
-                    text = "Status Videos",
+                    text = "Status Saver",
                     color = Color.White,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Medium
@@ -83,39 +99,43 @@ fun Videos(navController: NavController) {
                 )
                 Spacer(modifier = Modifier.width(12.dp))
                 Icon(
-                    imageVector = Icons.Filled.Send,
-                    contentDescription = "",
-                    tint = Color.White
+                    imageVector = Icons.Filled.Send, contentDescription = "", tint = Color.White
                 )
             }, colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0XFF008069)))
         },
     ) {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(4),
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = it.calculateTopPadding()),
-            contentPadding = PaddingValues(4.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp),
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            items(statuses) { statusFile ->
-                when (statusFile.extension.lowercase()) {
-                    "mp4" -> {
-                        val bitmap = loadImageBitmap(statusFile)
-                        if (bitmap != null) {
+        if (selectedVideo != null) {
+            VideoPlayer(videoFile = selectedVideo!!) {
+                selectedVideo = null
+            }
+        } else {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(4),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = it.calculateTopPadding()),
+                contentPadding = PaddingValues(4.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                items(statuses) { statusFile ->
+                    when (statusFile.extension.lowercase()) {
+                        "mp4" -> {
+                            val thumbnail = loadVideoThumbnail(statusFile)
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .aspectRatio(1f)
+                                    .clickable { selectedVideo = statusFile }
                             ) {
-                                Image(
-                                    bitmap = bitmap.asImageBitmap(),
-                                    contentDescription = "WhatsApp Status Image",
-                                    modifier = Modifier
-                                        .fillMaxSize(),
-                                    contentScale = ContentScale.Crop
-                                )
+                                if (thumbnail != null) {
+                                    Image(
+                                        bitmap = thumbnail.asImageBitmap(),
+                                        contentDescription = "WhatsApp Video Thumbnail",
+                                        modifier = Modifier.fillMaxSize(),
+                                        contentScale = ContentScale.Crop
+                                    )
+                                }
                             }
                         }
                     }
@@ -123,4 +143,40 @@ fun Videos(navController: NavController) {
             }
         }
     }
+}
+
+fun loadVideoThumbnail(file: File): Bitmap? {
+    return ThumbnailUtils.createVideoThumbnail(
+        file.path,
+        MediaStore.Images.Thumbnails.MINI_KIND
+    )
+}
+
+@SuppressLint("OpaqueUnitKey")
+@Composable
+fun VideoPlayer(videoFile: File, onDismiss: () -> Unit) {
+    val context = LocalContext.current
+    val exoPlayer = remember {
+        ExoPlayer.Builder(context).build().apply {
+            setMediaItem(MediaItem.fromUri(Uri.fromFile(videoFile)))
+            prepare()
+        }
+    }
+
+    DisposableEffect(
+        AndroidView(
+            factory = {
+                PlayerView(context).apply {
+                    player = exoPlayer
+                }
+            },
+            modifier = Modifier.fillMaxSize()
+        )
+    ) {
+        onDispose {
+            exoPlayer.release()
+        }
+    }
+
+    BackHandler(onBack = onDismiss)
 }
