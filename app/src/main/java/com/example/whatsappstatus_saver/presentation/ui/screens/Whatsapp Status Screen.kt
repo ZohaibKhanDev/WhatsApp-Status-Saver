@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FormatAlignCenter
 import androidx.compose.material.icons.filled.Send
+import androidx.compose.material.icons.filled.TagFaces
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -48,10 +50,14 @@ fun WhatsAppStatusScreen(navController: NavController) {
                     fontWeight = FontWeight.Medium
                 )
             }, actions = {
-                Icon(imageVector = Icons.Filled.Send, contentDescription = "", tint = Color.White)
+                Icon(
+                    imageVector = Icons.Filled.FormatAlignCenter,
+                    contentDescription = "",
+                    tint = Color.White
+                )
                 Spacer(modifier = Modifier.width(12.dp))
                 Icon(
-                    imageVector = Icons.Filled.Warning,
+                    imageVector = Icons.Filled.Send,
                     contentDescription = "",
                     tint = Color.White
                 )

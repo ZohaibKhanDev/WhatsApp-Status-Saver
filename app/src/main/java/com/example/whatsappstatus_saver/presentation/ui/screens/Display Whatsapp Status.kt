@@ -10,6 +10,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Send
@@ -54,7 +57,8 @@ fun DisplayWhatsAppStatuses() {
             Log.e("WhatsAppStatus", "Folder not found")
         }
     }
-    LazyColumn(
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(4),
         modifier = Modifier.fillMaxSize()
     ) {
         items(statuses) { statusFile ->
@@ -72,13 +76,13 @@ fun DisplayWhatsAppStatuses() {
                     }
                 }
 
-                "mp4" -> {
-                    Text("Video: ${statusFile.name}", modifier = Modifier.padding(8.dp))
-                }
+                /* "mp4" -> {
+                     Text("Video: ${statusFile.name}", modifier = Modifier.padding(8.dp))
+                 }
 
-                "mp3", "opus" -> {
-                    AudioFileItem(statusFile)
-                }
+                 "mp3", "opus" -> {
+                     AudioFileItem(statusFile)
+                 }*/
             }
         }
     }
