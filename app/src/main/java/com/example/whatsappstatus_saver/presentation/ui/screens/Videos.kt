@@ -59,7 +59,6 @@ import java.io.File
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun Videos(navController: NavController) {
-
     val statuses = remember { mutableStateListOf<File>() }
     var selectedVideo by remember { mutableStateOf<File?>(null) }
 
@@ -105,7 +104,6 @@ fun Videos(navController: NavController) {
             }, colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0XFF008069)))
         },
     ) {
-
         if (selectedVideo != null) {
             VideoPlayer(videoFile = selectedVideo!!) {
                 selectedVideo = null
