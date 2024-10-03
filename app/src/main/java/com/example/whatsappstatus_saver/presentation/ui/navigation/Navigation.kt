@@ -138,5 +138,4 @@ fun BottomNavigation(navController: NavController) {
             }, colors = NavigationBarItemDefaults.colors(indicatorColor = Color.Transparent))
         }
     }
-
 }
