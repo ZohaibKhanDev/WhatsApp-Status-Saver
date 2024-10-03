@@ -1,6 +1,8 @@
 package com.example.whatsappstatus_saver.presentation.ui.screens
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import android.media.ThumbnailUtils
@@ -8,6 +10,7 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -28,6 +31,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.FormatAlignCenter
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Send
@@ -72,6 +76,7 @@ fun Videos(navController: NavController) {
     var selectedVideo by remember { mutableStateOf<File?>(null) }
     var isLoading by remember { mutableStateOf(true) } // Loading state
 
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         isLoading = true
@@ -118,7 +123,6 @@ fun Videos(navController: NavController) {
             }, colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0XFF008069)))
         },
     ) {
-
         if (isLoading) {
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -127,11 +131,14 @@ fun Videos(navController: NavController) {
                 CircularProgressIndicator()
             }
         } else if (selectedVideo != null) {
-            VideoPlayer(videoFile = selectedVideo!!) {
-                selectedVideo = null
-            }
+            VideoPlayer(
+                videoFile = selectedVideo!!,
+                onDismiss = { selectedVideo = null },
+                onDownloadClick = { videoFile ->
+                    downloadVideo(context, videoFile)
+                }
+            )
         } else {
-
             LazyVerticalGrid(
                 columns = GridCells.Fixed(4),
                 modifier = Modifier
@@ -189,6 +196,24 @@ fun Videos(navController: NavController) {
     }
 }
 
+fun downloadVideo(context: Context, file: File) {
+    try {
+        val downloadsFolder = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+            file.name
+        )
+        file.copyTo(downloadsFolder, overwrite = true)
+        Toast.makeText(context, "Video saved to Downloads", Toast.LENGTH_SHORT).show()
+        val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
+        intent.data = Uri.fromFile(downloadsFolder)
+        context.sendBroadcast(intent)
+
+    } catch (e: Exception) {
+        e.printStackTrace()
+        Toast.makeText(context, "Failed to download video", Toast.LENGTH_SHORT).show()
+    }
+}
+
 
 fun loadVideoThumbnail(file: File): Bitmap? {
     return ThumbnailUtils.createVideoThumbnail(
@@ -212,7 +237,7 @@ fun getVideoDuration(file: File): String {
 
 @SuppressLint("OpaqueUnitKey")
 @Composable
-fun VideoPlayer(videoFile: File, onDismiss: () -> Unit) {
+fun VideoPlayer(videoFile: File, onDismiss: () -> Unit, onDownloadClick: (File) -> Unit) {
     val context = LocalContext.current
     val exoPlayer = remember {
         ExoPlayer.Builder(context).build().apply {
@@ -221,25 +246,49 @@ fun VideoPlayer(videoFile: File, onDismiss: () -> Unit) {
         }
     }
 
-    DisposableEffect(
-        AndroidView(
-            factory = {
-                PlayerView(context).apply {
-                    player = exoPlayer
-                }
-            },
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black)
+    ) {
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 30.dp)
-                .height(600.dp)
+                .height(500.dp)
+                .align(Alignment.Center)
+        ) {
+            AndroidView(
+                factory = {
+                    PlayerView(context).apply {
+                        player = exoPlayer
+                    }
+                },
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+
+        Icon(
+            imageVector = Icons.Default.Download,
+            contentDescription = "Download Icon",
+            tint = Color.White,
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(16.dp)
+                .clickable {
+                    onDownloadClick(videoFile)
+                }
         )
-    ) {
+    }
+
+    BackHandler(onBack = onDismiss)
+
+    DisposableEffect(Unit) {
         onDispose {
             exoPlayer.release()
         }
     }
-
-    BackHandler(onBack = onDismiss)
 }
+
+
 
 
