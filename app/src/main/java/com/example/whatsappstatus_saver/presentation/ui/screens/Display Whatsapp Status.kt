@@ -47,12 +47,12 @@ fun DisplayWhatsAppStatuses() {
 
         if (whatsappStatusFolder.exists()) {
             val statusFiles = whatsappStatusFolder.listFiles { file ->
-                file.extension.lowercase() in listOf("jpg", "jpeg", "png", "mp4", "mp3", "opus")
+                file.extension.lowercase() in listOf("jpg", "jpeg", "png")
             }
             if (statusFiles != null) {
                 statuses.addAll(statusFiles)
             } else {
-                Log.d("WhatsAppStatus", "No files found")
+                Log.d("WhatsAppStatus", "No image files found")
             }
         } else {
             Log.e("WhatsAppStatus", "Folder not found")
@@ -63,39 +63,27 @@ fun DisplayWhatsAppStatuses() {
         columns = GridCells.Fixed(4),
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 50.dp),
+            .padding(top = 80.dp),
         contentPadding = PaddingValues(4.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         items(statuses) { statusFile ->
-            when (statusFile.extension.lowercase()) {
-                "jpg", "jpeg", "png" -> {
-                    val bitmap = loadImageBitmap(statusFile)
-                    if (bitmap != null) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .aspectRatio(1f)
-                        ) {
-                            Image(
-                                bitmap = bitmap.asImageBitmap(),
-                                contentDescription = "WhatsApp Status Image",
-                                modifier = Modifier
-                                    .fillMaxSize(),
-                                contentScale = ContentScale.Crop
-                            )
-                        }
-                    }
+            val bitmap = loadImageBitmap(statusFile)
+            if (bitmap != null) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1f)
+                ) {
+                    Image(
+                        bitmap = bitmap.asImageBitmap(),
+                        contentDescription = "WhatsApp Status Image",
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
                 }
-
-                /* "mp4" -> {
-                     Text("Video: ${statusFile.name}", modifier = Modifier.padding(8.dp))
-                 }
-
-                 "mp3", "opus" -> {
-                     AudioFileItem(statusFile)
-                 }*/
             }
         }
     }
@@ -104,4 +92,5 @@ fun DisplayWhatsAppStatuses() {
 fun loadImageBitmap(file: File): Bitmap? {
     return BitmapFactory.decodeFile(file.absolutePath)
 }
+
 

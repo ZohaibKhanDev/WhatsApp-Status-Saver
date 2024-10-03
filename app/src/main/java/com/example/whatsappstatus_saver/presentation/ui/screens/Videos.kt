@@ -31,6 +31,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FormatAlignCenter
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Send
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -59,6 +60,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import androidx.navigation.NavController
+import kotlinx.coroutines.delay
 import java.io.File
 import java.util.concurrent.TimeUnit
 
@@ -68,8 +70,13 @@ import java.util.concurrent.TimeUnit
 fun Videos(navController: NavController) {
     val statuses = remember { mutableStateListOf<File>() }
     var selectedVideo by remember { mutableStateOf<File?>(null) }
+    var isLoading by remember { mutableStateOf(true) } // Loading state
+
 
     LaunchedEffect(Unit) {
+        isLoading = true
+        delay(2000)
+
         val whatsappStatusFolder = File(
             Environment.getExternalStorageDirectory()
                 .toString() + "/Android/media/com.whatsapp/WhatsApp/Media/.Statuses"
@@ -86,6 +93,7 @@ fun Videos(navController: NavController) {
         } else {
             Log.e("WhatsAppStatus", "Folder not found")
         }
+        isLoading = false
     }
 
     Scaffold(
@@ -110,11 +118,20 @@ fun Videos(navController: NavController) {
             }, colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0XFF008069)))
         },
     ) {
-        if (selectedVideo != null) {
+
+        if (isLoading) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        } else if (selectedVideo != null) {
             VideoPlayer(videoFile = selectedVideo!!) {
                 selectedVideo = null
             }
         } else {
+
             LazyVerticalGrid(
                 columns = GridCells.Fixed(4),
                 modifier = Modifier
@@ -143,7 +160,6 @@ fun Videos(navController: NavController) {
                             )
                         }
 
-
                         Icon(
                             imageVector = Icons.Default.PlayArrow,
                             contentDescription = "Play Icon",
@@ -152,7 +168,6 @@ fun Videos(navController: NavController) {
                                 .align(Alignment.Center)
                                 .size(40.dp)
                         )
-
 
                         Text(
                             text = duration,
@@ -182,6 +197,7 @@ fun loadVideoThumbnail(file: File): Bitmap? {
     )
 }
 
+@SuppressLint("DefaultLocale")
 fun getVideoDuration(file: File): String {
     val retriever = MediaMetadataRetriever()
     retriever.setDataSource(file.path)
