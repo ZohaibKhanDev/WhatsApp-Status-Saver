@@ -71,12 +71,12 @@ fun Videos(navController: NavController) {
 
         if (whatsappStatusFolder.exists()) {
             val statusFiles = whatsappStatusFolder.listFiles { file ->
-                file.extension.lowercase() in listOf("jpg", "jpeg", "png", "mp4", "mp3", "opus")
+                file.extension.lowercase() in listOf("mp4")
             }
             if (statusFiles != null) {
                 statuses.addAll(statusFiles)
             } else {
-                Log.d("WhatsAppStatus", "No files found")
+                Log.d("WhatsAppStatus", "No video files found")
             }
         } else {
             Log.e("WhatsAppStatus", "Folder not found")
@@ -121,24 +121,20 @@ fun Videos(navController: NavController) {
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 items(statuses) { statusFile ->
-                    when (statusFile.extension.lowercase()) {
-                        "mp4" -> {
-                            val thumbnail = loadVideoThumbnail(statusFile)
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .aspectRatio(1f)
-                                    .clickable { selectedVideo = statusFile }
-                            ) {
-                                if (thumbnail != null) {
-                                    Image(
-                                        bitmap = thumbnail.asImageBitmap(),
-                                        contentDescription = "WhatsApp Video Thumbnail",
-                                        modifier = Modifier.fillMaxSize(),
-                                        contentScale = ContentScale.Crop
-                                    )
-                                }
-                            }
+                    val thumbnail = loadVideoThumbnail(statusFile)
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(1f)
+                            .clickable { selectedVideo = statusFile }
+                    ) {
+                        if (thumbnail != null) {
+                            Image(
+                                bitmap = thumbnail.asImageBitmap(),
+                                contentDescription = "WhatsApp Video Thumbnail",
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop
+                            )
                         }
                     }
                 }
@@ -184,3 +180,4 @@ fun VideoPlayer(videoFile: File, onDismiss: () -> Unit) {
 
     BackHandler(onBack = onDismiss)
 }
+
