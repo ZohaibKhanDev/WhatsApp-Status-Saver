@@ -10,7 +10,6 @@ import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.VideoLibrary
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -19,7 +18,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
@@ -31,6 +32,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.whatsappstatus_saver.presentation.ui.screens.Saved
 import com.example.whatsappstatus_saver.presentation.ui.screens.SettingScreen
+import com.example.whatsappstatus_saver.presentation.ui.screens.VideoDetail
 import com.example.whatsappstatus_saver.presentation.ui.screens.Videos
 import com.example.whatsappstatus_saver.presentation.ui.screens.WhatsAppStatusScreen
 
@@ -48,6 +50,12 @@ fun Navigation(navController: NavHostController) {
         }
         composable(Screens.Setting.route) {
             SettingScreen(navController = navController)
+        }
+        composable(Screens.VideoDetail.route + "/{videoPath}") { backStackEntry ->
+            val videoPath = backStackEntry.arguments?.getString("videoPath")
+            if (videoPath != null) {
+                VideoDetail(navController = navController, videoPath)
+            }
         }
     }
 }
@@ -82,6 +90,13 @@ sealed class Screens(
         selectedIcon = Icons.Filled.Settings,
         unSelectedIcon = Icons.Outlined.Settings
     )
+
+    object VideoDetail : Screens(
+        "VideoDetail",
+        "VideoDetail",
+        selectedIcon = Icons.Filled.Settings,
+        unSelectedIcon = Icons.Outlined.Settings
+    )
 }
 
 
@@ -89,12 +104,23 @@ sealed class Screens(
 @Composable
 fun NavEntry() {
     val navController = rememberNavController()
+    var showBottomNav by remember { mutableStateOf(true) }
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
-    Scaffold(bottomBar = {
-        BottomAppBar {
-            BottomNavigation(navController = navController)
+    showBottomNav = when {
+        currentRoute == null -> true
+        currentRoute?.startsWith(Screens.VideoDetail.route) == true -> false
+        else -> true
+    }
+
+    Scaffold(
+        bottomBar = {
+            if (showBottomNav) {
+                BottomNavigation(navController = navController)
+            }
         }
-    }) {
+    ) { innerPadding ->
         Navigation(navController = navController)
     }
 }

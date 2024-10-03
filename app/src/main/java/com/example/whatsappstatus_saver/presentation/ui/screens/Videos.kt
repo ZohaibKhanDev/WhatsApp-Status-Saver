@@ -64,6 +64,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import androidx.navigation.NavController
+import com.example.whatsappstatus_saver.presentation.ui.navigation.Screens
 import kotlinx.coroutines.delay
 import java.io.File
 import java.util.concurrent.TimeUnit
@@ -156,7 +157,10 @@ fun Videos(navController: NavController) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .aspectRatio(1f)
-                            .clickable { selectedVideo = statusFile }
+                            .clickable {
+                                val video = Uri.encode(statusFile.absolutePath)
+                                navController.navigate(Screens.VideoDetail.route + "/$video")
+                            }
                     ) {
                         if (thumbnail != null) {
                             Image(
@@ -190,6 +194,7 @@ fun Videos(navController: NavController) {
                                 .padding(horizontal = 4.dp, vertical = 2.dp)
                         )
                     }
+
                 }
             }
         }

@@ -39,7 +39,6 @@ fun WhatsAppStatusScreen(navController: NavController) {
         permissionState.launchPermissionRequest()
     }
 
-
     Scaffold(
         topBar = {
             TopAppBar(title = {
