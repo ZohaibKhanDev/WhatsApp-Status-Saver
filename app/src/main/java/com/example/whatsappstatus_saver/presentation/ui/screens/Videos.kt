@@ -104,6 +104,7 @@ fun Videos(navController: NavController) {
             }, colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0XFF008069)))
         },
     ) {
+
         if (selectedVideo != null) {
             VideoPlayer(videoFile = selectedVideo!!) {
                 selectedVideo = null
