@@ -2,6 +2,7 @@ package com.example.whatsappstatus_saver.presentation.ui.screens
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
+import android.media.MediaMetadataRetriever
 import android.media.ThumbnailUtils
 import android.net.Uri
 import android.os.Environment
@@ -9,6 +10,7 @@ import android.provider.MediaStore
 import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,12 +21,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FormatAlignCenter
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -40,6 +45,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
@@ -54,6 +60,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import androidx.navigation.NavController
 import java.io.File
+import java.util.concurrent.TimeUnit
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -67,7 +74,6 @@ fun Videos(navController: NavController) {
             Environment.getExternalStorageDirectory()
                 .toString() + "/Android/media/com.whatsapp/WhatsApp/Media/.Statuses"
         )
-
         if (whatsappStatusFolder.exists()) {
             val statusFiles = whatsappStatusFolder.listFiles { file ->
                 file.extension.lowercase() in listOf("mp4")
@@ -120,6 +126,8 @@ fun Videos(navController: NavController) {
             ) {
                 items(statuses) { statusFile ->
                     val thumbnail = loadVideoThumbnail(statusFile)
+                    val duration = getVideoDuration(statusFile)
+
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -134,6 +142,31 @@ fun Videos(navController: NavController) {
                                 contentScale = ContentScale.Crop
                             )
                         }
+
+
+                        Icon(
+                            imageVector = Icons.Default.PlayArrow,
+                            contentDescription = "Play Icon",
+                            tint = Color.White,
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .size(40.dp)
+                        )
+
+
+                        Text(
+                            text = duration,
+                            color = Color.White,
+                            fontSize = 12.sp,
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .padding(4.dp)
+                                .background(
+                                    Color.Black.copy(alpha = 0.5f),
+                                    shape = RoundedCornerShape(4.dp)
+                                )
+                                .padding(horizontal = 4.dp, vertical = 2.dp)
+                        )
                     }
                 }
             }
@@ -141,11 +174,24 @@ fun Videos(navController: NavController) {
     }
 }
 
+
 fun loadVideoThumbnail(file: File): Bitmap? {
     return ThumbnailUtils.createVideoThumbnail(
         file.path,
         MediaStore.Images.Thumbnails.MINI_KIND
     )
+}
+
+fun getVideoDuration(file: File): String {
+    val retriever = MediaMetadataRetriever()
+    retriever.setDataSource(file.path)
+    val duration =
+        retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong() ?: 0L
+    retriever.release()
+
+    val minutes = TimeUnit.MILLISECONDS.toMinutes(duration)
+    val seconds = TimeUnit.MILLISECONDS.toSeconds(duration) % 60
+    return String.format("%02d:%02d", minutes, seconds)
 }
 
 @SuppressLint("OpaqueUnitKey")
@@ -168,6 +214,7 @@ fun VideoPlayer(videoFile: File, onDismiss: () -> Unit) {
             },
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(top = 30.dp)
                 .height(600.dp)
         )
     ) {
@@ -178,4 +225,5 @@ fun VideoPlayer(videoFile: File, onDismiss: () -> Unit) {
 
     BackHandler(onBack = onDismiss)
 }
+
 
