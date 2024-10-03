@@ -180,6 +180,7 @@ fun Videos(navController: NavController) {
                                 .size(40.dp)
                         )
 
+
                         Text(
                             text = duration,
                             color = Color.White,
