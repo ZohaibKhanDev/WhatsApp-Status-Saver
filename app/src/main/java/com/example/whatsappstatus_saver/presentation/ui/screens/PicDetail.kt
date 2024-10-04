@@ -23,29 +23,25 @@ fun PicDetail(navController: NavController, PicPath: String) {
         AsyncImage(
             model = PicPath,
             contentDescription = "",
-            contentScale = ContentScale.Crop,
+            contentScale = ContentScale.Fit,
             modifier = Modifier.fillMaxSize()
         )
 
-        Icon(
-            imageVector = Icons.Filled.ArrowBackIosNew,
+        Icon(imageVector = Icons.Filled.ArrowBackIosNew,
             contentDescription = "",
-            tint = Color.White,
+            tint = Color.Magenta,
             modifier = Modifier
                 .clickable { navController.navigateUp() }
                 .align(Alignment.TopStart)
-                .padding(6.dp)
-        )
+                .padding(6.dp))
 
 
-        Icon(
-            imageVector = Icons.Filled.CloudDownload,
+        Icon(imageVector = Icons.Filled.CloudDownload,
             contentDescription = "",
-            tint = Color.White,
+            tint = Color.Magenta,
             modifier = Modifier
                 .clickable { }
                 .align(Alignment.TopEnd)
-                .padding(6.dp)
-        )
+                .padding(6.dp))
     }
 }

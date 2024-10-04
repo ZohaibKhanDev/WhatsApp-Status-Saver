@@ -66,10 +66,10 @@ fun DisplayWhatsAppStatuses(navController: NavController) {
         columns = GridCells.Fixed(4),
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 80.dp),
+            .padding(top = 70.dp),
         contentPadding = PaddingValues(4.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp),
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         items(statuses) { statusFile ->
             val bitmap = loadImageBitmap(statusFile)
