@@ -30,6 +30,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.whatsappstatus_saver.presentation.ui.screens.PicDetail
 import com.example.whatsappstatus_saver.presentation.ui.screens.Saved
 import com.example.whatsappstatus_saver.presentation.ui.screens.SettingScreen
 import com.example.whatsappstatus_saver.presentation.ui.screens.VideoDetail
@@ -55,6 +56,13 @@ fun Navigation(navController: NavHostController) {
             val videoPath = backStackEntry.arguments?.getString("videoPath")
             if (videoPath != null) {
                 VideoDetail(navController = navController, videoPath)
+            }
+        }
+
+        composable(Screens.PicDetail.route + "/{PicPath}") { backStackEntry ->
+            val PicPath = backStackEntry.arguments?.getString("PicPath")
+            if (PicPath != null) {
+                PicDetail(navController = navController, PicPath)
             }
         }
     }
@@ -95,6 +103,13 @@ sealed class Screens(
     object VideoDetail : Screens(
         "VideoDetail",
         "VideoDetail",
+        selectedIcon = Icons.Filled.Settings,
+        unSelectedIcon = Icons.Outlined.Settings
+    )
+
+    object PicDetail : Screens(
+        "PicDetail",
+        "PicDetail",
         selectedIcon = Icons.Filled.Settings,
         unSelectedIcon = Icons.Outlined.Settings
     )

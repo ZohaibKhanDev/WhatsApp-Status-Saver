@@ -3,6 +3,7 @@ package com.example.whatsappstatus_saver.presentation.ui.screens
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Environment
 import android.util.Log
 import androidx.compose.foundation.Image
@@ -31,12 +32,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.whatsappstatus_saver.presentation.ui.navigation.Screens
 import java.io.File
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DisplayWhatsAppStatuses() {
+fun DisplayWhatsAppStatuses(navController: NavController) {
     val statuses = remember { mutableStateListOf<File>() }
 
     LaunchedEffect(Unit) {
@@ -74,6 +77,15 @@ fun DisplayWhatsAppStatuses() {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .clickable {
+                            navController.navigate(
+                                Screens.PicDetail.route + "/${
+                                    Uri.encode(
+                                        bitmap.toString()
+                                    )
+                                }"
+                            )
+                        }
                         .aspectRatio(1f)
                 ) {
                     Image(

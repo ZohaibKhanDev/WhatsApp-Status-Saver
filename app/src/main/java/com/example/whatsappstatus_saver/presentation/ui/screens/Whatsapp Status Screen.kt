@@ -64,7 +64,7 @@ fun WhatsAppStatusScreen(navController: NavController) {
         },
     ) {
         if (permissionState.status.isGranted) {
-            DisplayWhatsAppStatuses()
+            DisplayWhatsAppStatuses(navController)
         } else {
             Box(
                 modifier = Modifier
