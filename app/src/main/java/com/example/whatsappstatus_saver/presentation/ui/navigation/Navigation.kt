@@ -128,7 +128,10 @@ fun NavEntry() {
 @Composable
 fun BottomNavigation(navController: NavController) {
     val item = listOf(
-        Screens.ImagesScreen, Screens.VideosScreen, Screens.Saved, Screens.Setting
+        Screens.ImagesScreen,
+        Screens.VideosScreen,
+        Screens.Saved,
+        Screens.Setting
     )
 
     NavigationBar(containerColor = Color(0XFF008069)) {
