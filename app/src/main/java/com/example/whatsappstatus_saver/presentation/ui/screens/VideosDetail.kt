@@ -28,9 +28,10 @@ import java.io.File
 @Composable
 fun VideoDetail(navController: NavController, videoPath: String) {
     val context = LocalContext.current
+    val videoFile = remember { File(videoPath) }
     val exoPlayer = remember {
         ExoPlayer.Builder(context).build().apply {
-            setMediaItem(MediaItem.fromUri(Uri.fromFile(File(videoPath))))
+            setMediaItem(MediaItem.fromUri(Uri.fromFile(videoFile)))
             prepare()
         }
     }
@@ -62,20 +63,17 @@ fun VideoDetail(navController: NavController, videoPath: String) {
                 }
         )
 
-
-            Icon(
-                imageVector = Icons.Default.CloudDownload,
-                contentDescription = "",
-                tint = Color.White,
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(16.dp)
-                    .clickable {
-
-                    }
-            )
-
-
+        Icon(
+            imageVector = Icons.Default.CloudDownload,
+            contentDescription = "Download Video",
+            tint = Color.White,
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(16.dp)
+                .clickable {
+                    downloadVideo(context, videoFile)
+                }
+        )
     }
 
     DisposableEffect(Unit) {
@@ -84,3 +82,4 @@ fun VideoDetail(navController: NavController, videoPath: String) {
         }
     }
 }
+

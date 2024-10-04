@@ -75,17 +75,15 @@ import java.util.concurrent.TimeUnit
 fun Videos(navController: NavController) {
     val statuses = remember { mutableStateListOf<File>() }
     var selectedVideo by remember { mutableStateOf<File?>(null) }
-    var isLoading by remember { mutableStateOf(true) } // Loading state
+    var isLoading by remember { mutableStateOf(true) }
 
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         isLoading = true
-        delay(2000)
-
         val whatsappStatusFolder = File(
-            Environment.getExternalStorageDirectory()
-                .toString() + "/Android/media/com.whatsapp/WhatsApp/Media/.Statuses"
+            Environment.getExternalStorageDirectory().toString() +
+                    "/Android/media/com.whatsapp/WhatsApp/Media/.Statuses"
         )
         if (whatsappStatusFolder.exists()) {
             val statusFiles = whatsappStatusFolder.listFiles { file ->
@@ -101,6 +99,7 @@ fun Videos(navController: NavController) {
         }
         isLoading = false
     }
+
 
     Scaffold(
         topBar = {
