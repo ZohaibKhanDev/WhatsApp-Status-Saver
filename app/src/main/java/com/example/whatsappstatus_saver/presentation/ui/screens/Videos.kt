@@ -124,6 +124,7 @@ fun Videos(navController: NavController) {
             }, colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0XFF008069)))
         },
     ) {
+
         if (isLoading) {
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -179,7 +180,6 @@ fun Videos(navController: NavController) {
                                 .align(Alignment.Center)
                                 .size(40.dp)
                         )
-
 
                         Text(
                             text = duration,
