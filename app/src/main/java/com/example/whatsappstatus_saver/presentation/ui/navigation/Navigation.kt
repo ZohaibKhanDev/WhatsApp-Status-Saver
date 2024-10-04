@@ -127,6 +127,7 @@ fun NavEntry() {
     showBottomNav = when {
         currentRoute == null -> true
         currentRoute.startsWith(Screens.VideoDetail.route) -> false
+        currentRoute.startsWith(Screens.PicDetail.route) -> false
         else -> true
     }
 

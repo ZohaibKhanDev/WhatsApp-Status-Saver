@@ -81,7 +81,7 @@ fun DisplayWhatsAppStatuses(navController: NavController) {
                             navController.navigate(
                                 Screens.PicDetail.route + "/${
                                     Uri.encode(
-                                        bitmap.toString()
+                                        statusFile.absolutePath
                                     )
                                 }"
                             )
