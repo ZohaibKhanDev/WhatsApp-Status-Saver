@@ -8,6 +8,7 @@ import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.VideoLibrary
 import androidx.compose.material.icons.outlined.Bookmark
+import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.Settings
@@ -91,7 +92,7 @@ sealed class Screens(
         "Saved",
         "Saved",
         selectedIcon = Icons.Filled.Bookmark,
-        unSelectedIcon = Icons.Outlined.Bookmark
+        unSelectedIcon = Icons.Outlined.BookmarkBorder
     )
 
 
