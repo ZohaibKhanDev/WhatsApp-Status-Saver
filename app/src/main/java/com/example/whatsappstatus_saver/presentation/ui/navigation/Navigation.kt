@@ -84,6 +84,7 @@ sealed class Screens(
         unSelectedIcon = Icons.Outlined.Favorite
     )
 
+
     object Setting : Screens(
         "Setting",
         "Setting",
@@ -103,6 +104,7 @@ sealed class Screens(
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun NavEntry() {
+
     val navController = rememberNavController()
     var showBottomNav by remember { mutableStateOf(true) }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -110,7 +112,7 @@ fun NavEntry() {
 
     showBottomNav = when {
         currentRoute == null -> true
-        currentRoute?.startsWith(Screens.VideoDetail.route) == true -> false
+        currentRoute.startsWith(Screens.VideoDetail.route) -> false
         else -> true
     }
 
@@ -140,7 +142,7 @@ fun BottomNavigation(navController: NavController) {
         item.forEach {
             NavigationBarItem(selected = current == it.route, onClick = {
                 navController.navigate(it.route) {
-                    navController.graph?.let {
+                    navController.graph.let {
                         it.route?.let { it1 -> popUpTo(it1) }
                         launchSingleTop = true
                         restoreState = true
