@@ -220,13 +220,13 @@ fun downloadVideo(context: Context, file: File) {
     }
 }
 
-
 fun loadVideoThumbnail(file: File): Bitmap? {
     return ThumbnailUtils.createVideoThumbnail(
         file.path,
         MediaStore.Images.Thumbnails.MINI_KIND
     )
 }
+
 
 @SuppressLint("DefaultLocale")
 fun getVideoDuration(file: File): String {
@@ -294,7 +294,3 @@ fun VideoPlayer(videoFile: File, onDismiss: () -> Unit, onDownloadClick: (File) 
         }
     }
 }
-
-
-
-
