@@ -104,7 +104,6 @@ sealed class Screens(
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun NavEntry() {
-
     val navController = rememberNavController()
     var showBottomNav by remember { mutableStateOf(true) }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
