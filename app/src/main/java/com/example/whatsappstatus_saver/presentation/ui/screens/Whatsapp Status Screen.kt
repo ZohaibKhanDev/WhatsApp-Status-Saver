@@ -1,9 +1,11 @@
 package com.example.whatsappstatus_saver.presentation.ui.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FormatAlignCenter
@@ -21,10 +23,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.whatsappstatus_saver.R
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -49,16 +54,13 @@ fun WhatsAppStatusScreen(navController: NavController) {
                     fontWeight = FontWeight.Medium
                 )
             }, actions = {
-                Icon(
-                    imageVector = Icons.Filled.FormatAlignCenter,
+                Image(
+                    painter = painterResource(id = R.drawable.premium),
                     contentDescription = "",
-                    tint = Color.White
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-                Icon(
-                    imageVector = Icons.Filled.Send,
-                    contentDescription = "",
-                    tint = Color.White
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .padding(end = 10.dp)
+                        .size(26.dp)
                 )
             }, colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0XFF008069)))
         },

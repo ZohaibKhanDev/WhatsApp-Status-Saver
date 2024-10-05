@@ -7,7 +7,6 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.VideoLibrary
-import androidx.compose.material.icons.outlined.Bookmark
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Image
@@ -35,7 +34,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.whatsappstatus_saver.presentation.ui.screens.PicDetail
 import com.example.whatsappstatus_saver.presentation.ui.screens.Saved
-import com.example.whatsappstatus_saver.presentation.ui.screens.FavScreen
+import com.example.whatsappstatus_saver.presentation.ui.screens.SettingScreen
 import com.example.whatsappstatus_saver.presentation.ui.screens.VideoDetail
 import com.example.whatsappstatus_saver.presentation.ui.screens.Videos
 import com.example.whatsappstatus_saver.presentation.ui.screens.WhatsAppStatusScreen
@@ -52,8 +51,8 @@ fun Navigation(navController: NavHostController) {
         composable(Screens.Saved.route) {
             Saved(navController = navController)
         }
-        composable(Screens.FavScreen.route) {
-            FavScreen(navController = navController)
+        composable(Screens.SettingScreen.route) {
+            SettingScreen(navController = navController)
         }
         composable(Screens.VideoDetail.route + "/{videoPath}") { backStackEntry ->
             val videoPath = backStackEntry.arguments?.getString("videoPath")
@@ -96,11 +95,11 @@ sealed class Screens(
     )
 
 
-    object FavScreen : Screens(
-        "FavScreen",
-        "FavScreen",
-        selectedIcon = Icons.Filled.Favorite,
-        unSelectedIcon = Icons.Outlined.FavoriteBorder
+    object SettingScreen : Screens(
+        "Setting",
+        "Setting",
+        selectedIcon = Icons.Filled.Settings,
+        unSelectedIcon = Icons.Outlined.Settings
     )
 
     object VideoDetail : Screens(
@@ -151,7 +150,7 @@ fun BottomNavigation(navController: NavController) {
         Screens.ImagesScreen,
         Screens.VideosScreen,
         Screens.Saved,
-        Screens.FavScreen
+        Screens.SettingScreen
     )
 
     NavigationBar(containerColor = Color(0XFF008069)) {

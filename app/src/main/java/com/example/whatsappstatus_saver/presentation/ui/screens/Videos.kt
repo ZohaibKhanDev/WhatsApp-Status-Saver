@@ -56,6 +56,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -64,6 +65,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import androidx.navigation.NavController
+import com.example.whatsappstatus_saver.R
 import com.example.whatsappstatus_saver.presentation.ui.navigation.Screens
 import kotlinx.coroutines.delay
 import java.io.File
@@ -110,95 +112,87 @@ fun Videos(navController: NavController) {
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Medium
                 )
-            }, actions = {
-                Icon(
-                    imageVector = Icons.Filled.FormatAlignCenter,
+            },actions = {
+                Image(
+                    painter = painterResource(id = R.drawable.premium),
                     contentDescription = "",
-                    tint = Color.White
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-                Icon(
-                    imageVector = Icons.Filled.Send, contentDescription = "", tint = Color.White
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .padding(end = 10.dp)
+                        .size(26.dp)
                 )
             }, colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0XFF008069)))
         },
     ) {
-        if (statuses.isNotEmpty()) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(text = "No Videos Found")
+
+        if (isLoading) {
+            Box(
+                modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
             }
+        } else if (selectedVideo != null) {
+            VideoPlayer(videoFile = selectedVideo!!,
+                onDismiss = { selectedVideo = null },
+                onDownloadClick = { videoFile ->
+                    downloadVideo(context, videoFile)
+                })
         } else {
-            if (isLoading) {
-                Box(
-                    modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
-            } else if (selectedVideo != null) {
-                VideoPlayer(videoFile = selectedVideo!!,
-                    onDismiss = { selectedVideo = null },
-                    onDownloadClick = { videoFile ->
-                        downloadVideo(context, videoFile)
-                    })
-            } else {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(4),
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(top = it.calculateTopPadding()),
-                    contentPadding = PaddingValues(4.dp),
-                    verticalArrangement = Arrangement.spacedBy(4.dp),
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    items(statuses) { statusFile ->
-                        val thumbnail = loadVideoThumbnail(statusFile)
-                        val duration = getVideoDuration(statusFile)
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(4),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = it.calculateTopPadding()),
+                contentPadding = PaddingValues(4.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                items(statuses) { statusFile ->
+                    val thumbnail = loadVideoThumbnail(statusFile)
+                    val duration = getVideoDuration(statusFile)
 
-                        Box(modifier = Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(1f)
-                            .clickable {
-                                val video = Uri.encode(statusFile.absolutePath)
-                                navController.navigate(Screens.VideoDetail.route + "/$video")
-                            }) {
-                            if (thumbnail != null) {
-                                Image(
-                                    bitmap = thumbnail.asImageBitmap(),
-                                    contentDescription = "WhatsApp Video Thumbnail",
-                                    modifier = Modifier.fillMaxSize(),
-                                    contentScale = ContentScale.Crop
-                                )
-                            }
-
-                            Icon(
-                                imageVector = Icons.Default.PlayArrow,
-                                contentDescription = "Play Icon",
-                                tint = Color.White,
-                                modifier = Modifier
-                                    .align(Alignment.Center)
-                                    .size(40.dp)
-                            )
-
-                            Text(
-                                text = duration,
-                                color = Color.White,
-                                fontSize = 12.sp,
-                                modifier = Modifier
-                                    .align(Alignment.BottomEnd)
-                                    .padding(4.dp)
-                                    .background(
-                                        Color.Black.copy(alpha = 0.5f),
-                                        shape = RoundedCornerShape(4.dp)
-                                    )
-                                    .padding(horizontal = 4.dp, vertical = 2.dp)
+                    Box(modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1f)
+                        .clickable {
+                            val video = Uri.encode(statusFile.absolutePath)
+                            navController.navigate(Screens.VideoDetail.route + "/$video")
+                        }) {
+                        if (thumbnail != null) {
+                            Image(
+                                bitmap = thumbnail.asImageBitmap(),
+                                contentDescription = "WhatsApp Video Thumbnail",
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop
                             )
                         }
+
+                        Icon(
+                            imageVector = Icons.Default.PlayArrow,
+                            contentDescription = "Play Icon",
+                            tint = Color.White,
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .size(40.dp)
+                        )
+
+                        Text(
+                            text = duration,
+                            color = Color.White,
+                            fontSize = 12.sp,
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .padding(4.dp)
+                                .background(
+                                    Color.Black.copy(alpha = 0.5f),
+                                    shape = RoundedCornerShape(4.dp)
+                                )
+                                .padding(horizontal = 4.dp, vertical = 2.dp)
+                        )
                     }
                 }
             }
         }
-
-
     }
 }
 
