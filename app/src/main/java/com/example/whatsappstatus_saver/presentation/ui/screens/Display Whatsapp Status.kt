@@ -20,11 +20,13 @@ import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
@@ -62,39 +64,45 @@ fun DisplayWhatsAppStatuses(navController: NavController) {
         }
     }
 
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(4),
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 70.dp),
-        contentPadding = PaddingValues(4.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
-    ) {
-        items(statuses) { statusFile ->
-            val bitmap = loadImageBitmap(statusFile)
-            if (bitmap != null) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            navController.navigate(
-                                Screens.PicDetail.route + "/${
-                                    Uri.encode(
-                                        statusFile.absolutePath
-                                    )
-                                }"
-                            )
-                        }
-                        .aspectRatio(1f)
-                ) {
-                    Image(
-                        bitmap = bitmap.asImageBitmap(),
-                        contentDescription = "WhatsApp Status Image",
+    if (statuses.isEmpty()) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(text = "No Images Found", style = MaterialTheme.typography.bodyLarge)
+        }
+    } else {
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(4),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 70.dp),
+            contentPadding = PaddingValues(4.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            items(statuses) { statusFile ->
+                val bitmap = loadImageBitmap(statusFile)
+                if (bitmap != null) {
+                    Box(
                         modifier = Modifier
-                            .fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
+                            .fillMaxWidth()
+                            .clickable {
+                                navController.navigate(
+                                    Screens.PicDetail.route + "/${
+                                        Uri.encode(statusFile.absolutePath)
+                                    }"
+                                )
+                            }
+                            .aspectRatio(1f)
+                    ) {
+                        Image(
+                            bitmap = bitmap.asImageBitmap(),
+                            contentDescription = "WhatsApp Status Image",
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
                 }
             }
         }
@@ -104,5 +112,3 @@ fun DisplayWhatsAppStatuses(navController: NavController) {
 fun loadImageBitmap(file: File): Bitmap? {
     return BitmapFactory.decodeFile(file.absolutePath)
 }
-
-

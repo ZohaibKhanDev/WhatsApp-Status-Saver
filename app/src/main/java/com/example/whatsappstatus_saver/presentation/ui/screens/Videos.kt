@@ -81,9 +81,10 @@ fun Videos(navController: NavController) {
 
     LaunchedEffect(Unit) {
         isLoading = true
+        delay(500)
         val whatsappStatusFolder = File(
-            Environment.getExternalStorageDirectory().toString() +
-                    "/Android/media/com.whatsapp/WhatsApp/Media/.Statuses"
+            Environment.getExternalStorageDirectory()
+                .toString() + "/Android/media/com.whatsapp/WhatsApp/Media/.Statuses"
         )
         if (whatsappStatusFolder.exists()) {
             val statusFiles = whatsappStatusFolder.listFiles { file ->
@@ -99,7 +100,6 @@ fun Videos(navController: NavController) {
         }
         isLoading = false
     }
-
 
     Scaffold(
         topBar = {
@@ -123,83 +123,85 @@ fun Videos(navController: NavController) {
             }, colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0XFF008069)))
         },
     ) {
-
-        if (isLoading) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
+        if (statuses.isNotEmpty()) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text(text = "No Videos Found")
             }
-        } else if (selectedVideo != null) {
-            VideoPlayer(
-                videoFile = selectedVideo!!,
-                onDismiss = { selectedVideo = null },
-                onDownloadClick = { videoFile ->
-                    downloadVideo(context, videoFile)
-                }
-            )
         } else {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(4),
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = it.calculateTopPadding()),
-                contentPadding = PaddingValues(4.dp),
-                verticalArrangement = Arrangement.spacedBy(4.dp),
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                items(statuses) { statusFile ->
-                    val thumbnail = loadVideoThumbnail(statusFile)
-                    val duration = getVideoDuration(statusFile)
+            if (isLoading) {
+                Box(
+                    modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            } else if (selectedVideo != null) {
+                VideoPlayer(videoFile = selectedVideo!!,
+                    onDismiss = { selectedVideo = null },
+                    onDownloadClick = { videoFile ->
+                        downloadVideo(context, videoFile)
+                    })
+            } else {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(4),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = it.calculateTopPadding()),
+                    contentPadding = PaddingValues(4.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    items(statuses) { statusFile ->
+                        val thumbnail = loadVideoThumbnail(statusFile)
+                        val duration = getVideoDuration(statusFile)
 
-                    Box(
-                        modifier = Modifier
+                        Box(modifier = Modifier
                             .fillMaxWidth()
                             .aspectRatio(1f)
                             .clickable {
                                 val video = Uri.encode(statusFile.absolutePath)
                                 navController.navigate(Screens.VideoDetail.route + "/$video")
+                            }) {
+                            if (thumbnail != null) {
+                                Image(
+                                    bitmap = thumbnail.asImageBitmap(),
+                                    contentDescription = "WhatsApp Video Thumbnail",
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentScale = ContentScale.Crop
+                                )
                             }
-                    ) {
-                        if (thumbnail != null) {
-                            Image(
-                                bitmap = thumbnail.asImageBitmap(),
-                                contentDescription = "WhatsApp Video Thumbnail",
-                                modifier = Modifier.fillMaxSize(),
-                                contentScale = ContentScale.Crop
+
+                            Icon(
+                                imageVector = Icons.Default.PlayArrow,
+                                contentDescription = "Play Icon",
+                                tint = Color.White,
+                                modifier = Modifier
+                                    .align(Alignment.Center)
+                                    .size(40.dp)
+                            )
+
+                            Text(
+                                text = duration,
+                                color = Color.White,
+                                fontSize = 12.sp,
+                                modifier = Modifier
+                                    .align(Alignment.BottomEnd)
+                                    .padding(4.dp)
+                                    .background(
+                                        Color.Black.copy(alpha = 0.5f),
+                                        shape = RoundedCornerShape(4.dp)
+                                    )
+                                    .padding(horizontal = 4.dp, vertical = 2.dp)
                             )
                         }
-
-                        Icon(
-                            imageVector = Icons.Default.PlayArrow,
-                            contentDescription = "Play Icon",
-                            tint = Color.White,
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .size(40.dp)
-                        )
-
-                        Text(
-                            text = duration,
-                            color = Color.White,
-                            fontSize = 12.sp,
-                            modifier = Modifier
-                                .align(Alignment.BottomEnd)
-                                .padding(4.dp)
-                                .background(
-                                    Color.Black.copy(alpha = 0.5f),
-                                    shape = RoundedCornerShape(4.dp)
-                                )
-                                .padding(horizontal = 4.dp, vertical = 2.dp)
-                        )
                     }
-
                 }
             }
         }
+
+
     }
 }
+
 
 fun downloadVideo(context: Context, file: File) {
     try {
@@ -221,8 +223,7 @@ fun downloadVideo(context: Context, file: File) {
 
 fun loadVideoThumbnail(file: File): Bitmap? {
     return ThumbnailUtils.createVideoThumbnail(
-        file.path,
-        MediaStore.Images.Thumbnails.MINI_KIND
+        file.path, MediaStore.Images.Thumbnails.MINI_KIND
     )
 }
 
@@ -267,13 +268,11 @@ fun VideoPlayer(videoFile: File, onDismiss: () -> Unit, onDownloadClick: (File) 
                     PlayerView(context).apply {
                         player = exoPlayer
                     }
-                },
-                modifier = Modifier.fillMaxSize()
+                }, modifier = Modifier.fillMaxSize()
             )
         }
 
-        Icon(
-            imageVector = Icons.Default.Download,
+        Icon(imageVector = Icons.Default.Download,
             contentDescription = "Download Icon",
             tint = Color.White,
             modifier = Modifier
@@ -281,8 +280,7 @@ fun VideoPlayer(videoFile: File, onDismiss: () -> Unit, onDownloadClick: (File) 
                 .padding(16.dp)
                 .clickable {
                     onDownloadClick(videoFile)
-                }
-        )
+                })
     }
 
     BackHandler(onBack = onDismiss)
