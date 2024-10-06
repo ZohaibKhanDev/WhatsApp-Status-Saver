@@ -60,6 +60,7 @@ import androidx.navigation.NavController
 fun SettingScreen(
     navController: NavController,
     selectedLanguage: String,
+    onLanguageChanged: (String) -> Unit
 ) {
     val context = LocalContext.current
     val sharedPreferences = context.getSharedPreferences("Settings", Context.MODE_PRIVATE)
@@ -218,6 +219,7 @@ fun SettingScreen(
                         sharedPreferences.edit().putString("selectedLanguage", selectedLanguage)
                             .apply()
                         showLanguageDialog = false
+                        onLanguageChanged(selected)
                     },
                     onDismissRequest = { showLanguageDialog = false }
                 )

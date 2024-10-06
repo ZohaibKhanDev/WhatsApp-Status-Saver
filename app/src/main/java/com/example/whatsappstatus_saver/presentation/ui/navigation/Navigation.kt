@@ -11,6 +11,7 @@ import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.VideoLibrary
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -42,7 +43,11 @@ import com.example.whatsappstatus_saver.presentation.ui.screens.Videos
 import com.example.whatsappstatus_saver.presentation.ui.screens.WhatsAppStatusScreen
 
 @Composable
-fun Navigation(navController: NavHostController, selectedLanguage: String, ) {
+fun Navigation(
+    navController: NavHostController,
+    selectedLanguage: String,
+    onLanguageChanged: (String) -> Unit
+) {
     NavHost(navController = navController, startDestination = Screens.ImagesScreen.route) {
         composable(Screens.ImagesScreen.route) {
             WhatsAppStatusScreen(navController, selectedLanguage)
@@ -54,7 +59,11 @@ fun Navigation(navController: NavHostController, selectedLanguage: String, ) {
             Saved(navController = navController, selectedLanguage)
         }
         composable(Screens.SettingScreen.route) {
-            SettingScreen(navController = navController, selectedLanguage)
+            SettingScreen(
+                navController = navController,
+                selectedLanguage = selectedLanguage,
+                onLanguageChanged = onLanguageChanged
+            )
         }
         composable(Screens.VideoDetail.route + "/{videoPath}") { backStackEntry ->
             val videoPath = backStackEntry.arguments?.getString("videoPath")
@@ -71,6 +80,8 @@ fun Navigation(navController: NavHostController, selectedLanguage: String, ) {
         }
     }
 }
+
+
 
 
 sealed class Screens(
@@ -138,6 +149,7 @@ sealed class Screens(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun NavEntry() {
@@ -147,6 +159,10 @@ fun NavEntry() {
 
     var selectedLanguage by remember {
         mutableStateOf(sharedPreferences.getString("selectedLanguage", "English") ?: "English")
+    }
+
+    LaunchedEffect(selectedLanguage) {
+        sharedPreferences.edit().putString("selectedLanguage", selectedLanguage).apply()
     }
 
     var showBottomNav by remember { mutableStateOf(true) }
@@ -163,17 +179,23 @@ fun NavEntry() {
     Scaffold(
         bottomBar = {
             if (showBottomNav) {
-                BottomNavigation(navController = navController, selectedLanguage)
+                BottomNavigation(navController = navController, selectedLanguage, onLanguageChanged = { newLanguage ->
+                    selectedLanguage = newLanguage
+                })
             }
         }
     ) {
-        Navigation(navController = navController, selectedLanguage)
+        Navigation(navController = navController, selectedLanguage, onLanguageChanged = { newLanguage ->
+            selectedLanguage = newLanguage
+        })
     }
 }
 
 
+
+
 @Composable
-fun BottomNavigation(navController: NavController, selectedLanguage: String) {
+fun BottomNavigation(navController: NavController, selectedLanguage: String, onLanguageChanged: (String) -> Unit) {
     val item = listOf(
         Screens.ImagesScreen,
         Screens.VideosScreen,
@@ -219,5 +241,6 @@ fun BottomNavigation(navController: NavController, selectedLanguage: String) {
         }
     }
 }
+
 
 
