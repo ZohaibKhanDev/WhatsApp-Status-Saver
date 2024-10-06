@@ -51,26 +51,74 @@ fun WhatsAppStatusScreen(navController: NavController, selectedLanguage: String)
     Scaffold(
         topBar = {
             TopAppBar(title = {
-                Text(
-                    text = when (selectedLanguage) {
-                        "Urdu" -> "اسٹیٹس امیجز"
-                        "Arabic" -> "صور الحالة"
-                        "English" -> "Status Images"
-                        else -> "Status Images"
-                    },
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
-                )
-            }, actions = {
-                Image(
-                    painter = painterResource(id = R.drawable.premium),
-                    contentDescription = "",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .padding(end = 10.dp)
-                        .size(26.dp)
-                )
+                when(selectedLanguage){
+                    "Urdu" ->   Image(
+                        painter = painterResource(id = R.drawable.premium),
+                        contentDescription = "",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .padding(end = 10.dp)
+                            .size(26.dp)
+                    )
+
+                    "Arabic" ->  Image(
+                        painter = painterResource(id = R.drawable.premium),
+                        contentDescription = "",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .padding(end = 10.dp)
+                            .size(26.dp)
+                    )
+
+                    else ->    Text(
+                        text = when (selectedLanguage) {
+                            "Urdu" -> "اسٹیٹس امیجز"
+                            "Arabic" -> "صور الحالة"
+                            "English" -> "Status Images"
+                            else -> "Status Images"
+                        },
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
+                    )
+                }
+            },actions = {
+                when (selectedLanguage){
+                    "Urdu" ->   Text(
+                        text = when (selectedLanguage) {
+                            "Urdu" -> "اسٹیٹس امیجز"
+                            "Arabic" -> "صور الحالة"
+                            "English" -> "Status Images"
+                            else -> "Status Images"
+                        },
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
+                    )
+
+
+                    "Arabic" -> Text(
+                        text = when (selectedLanguage) {
+                            "Urdu" -> "اسٹیٹس امیجز"
+                            "Arabic" -> "صور الحالة"
+                            "English" -> "Status Images"
+                            else -> "Status Images"
+                        },
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
+                    )
+
+                    else ->  Image(
+                        painter = painterResource(id = R.drawable.premium),
+                        contentDescription = "",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .padding(end = 10.dp)
+                            .size(26.dp)
+                    )
+                }
+
             }, colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0XFF008069)))
         },
     ) {
