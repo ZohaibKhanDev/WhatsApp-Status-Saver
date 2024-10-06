@@ -2,6 +2,7 @@ package com.example.whatsappstatus_saver.presentation.ui.screens
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -73,7 +74,11 @@ fun SettingScreen(
         "Urdu", "Arabic" -> LayoutDirection.Rtl
         else -> LayoutDirection.Ltr
     }
-
+    val sendIntent = Intent(Intent.ACTION_SEND).apply {
+        putExtra(Intent.EXTRA_TEXT, "https://github.com/ZohaibKhanDev/WhatsApp-Status-Saver")
+        type = "text/plain"
+    }
+    val shareIntent = Intent.createChooser(sendIntent, null)
     CompositionLocalProvider(LocalLayoutDirection provides layoutDirection) {
         Scaffold(
             topBar = {
@@ -152,6 +157,8 @@ fun SettingScreen(
                         "Urdu" -> "ایپ اپنے دوستوں کے ساتھ شیئر کریں"
                         "Arabic" -> "شارك التطبيق مع الأصدقاء والعائلة"
                         else -> "Share app with friends and family"
+                    }, onClick = {
+                        context.startActivity(shareIntent)
                     }
                 )
 
