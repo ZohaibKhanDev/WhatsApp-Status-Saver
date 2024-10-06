@@ -107,10 +107,15 @@ fun Videos(navController: NavController, selectedLanguage: String) {
         topBar = {
             TopAppBar(title = {
                 Text(
-                    text = if (selectedLanguage == "Urdu") "اسٹیٹس ویڈیوز" else "Status Images",
+                    text = when (selectedLanguage) {
+                        "Urdu" -> "اسٹیٹس ویڈیوز"
+                        "Arabic" -> "فيديوهات الحالة"
+                        "English" -> "Status Videos"
+                        else -> "Status Videos"
+                    },
                     color = Color.White,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Medium
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
                 )
             },actions = {
                 Image(
