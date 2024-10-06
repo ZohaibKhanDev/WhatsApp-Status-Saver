@@ -50,6 +50,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -65,9 +66,7 @@ import androidx.navigation.NavController
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SettingScreen(
-    navController: NavController,
-    selectedLanguage: String,
-    onLanguageChanged: (String) -> Unit
+    navController: NavController, selectedLanguage: String, onLanguageChanged: (String) -> Unit
 ) {
     val context = LocalContext.current
     val sharedPreferences = context.getSharedPreferences("Settings", Context.MODE_PRIVATE)
@@ -93,34 +92,28 @@ fun SettingScreen(
     val deviceId = context.applicationInfo.gwpAsanMode
     val shareIntent = Intent.createChooser(sendIntent, null)
     CompositionLocalProvider(LocalLayoutDirection provides layoutDirection) {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Text(
-                            text = when (selectedLanguage) {
-                                "Urdu" -> "ترتیبات"
-                                "Arabic" -> "الإعدادات"
-                                else -> "Settings"
-                            },
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 20.sp
-                        )
-                    },
-                    navigationIcon = {
-                        IconButton(onClick = { navController.popBackStack() }) {
-                            Icon(
-                                imageVector = Icons.Outlined.ArrowBack,
-                                contentDescription = null,
-                                tint = Color.White
-                            )
-                        }
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0XFF008069))
+        Scaffold(topBar = {
+            TopAppBar(title = {
+                Text(
+                    text = when (selectedLanguage) {
+                        "Urdu" -> "ترتیبات"
+                        "Arabic" -> "الإعدادات"
+                        else -> "Settings"
+                    }, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp
                 )
-            }
-        ) {
+            },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.Outlined.ArrowBack,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0XFF008069))
+            )
+        }) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -130,18 +123,15 @@ fun SettingScreen(
             ) {
 
                 RowWithIcon(
-                    icon = Icons.Outlined.Language,
-                    title = when (selectedLanguage) {
+                    icon = Icons.Outlined.Language, title = when (selectedLanguage) {
                         "Urdu" -> "زبان"
                         "Arabic" -> "اللغات"
                         else -> "Languages"
-                    },
-                    subtitle = when (selectedLanguage) {
+                    }, subtitle = when (selectedLanguage) {
                         "Urdu" -> "منتخب زبان: ${selectedLanguage}"
                         "Arabic" -> "اللغة المختارة: ${selectedLanguage}"
                         else -> "Selected Language: ${selectedLanguage}"
-                    },
-                    onClick = { showLanguageDialog = true }
+                    }, onClick = { showLanguageDialog = true }, selectedLanguage = selectedLanguage
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
@@ -160,170 +150,147 @@ fun SettingScreen(
 
 
                 RowWithIcon(
-                    icon = Icons.Outlined.Share,
-                    title = when (selectedLanguage) {
+                    icon = Icons.Outlined.Share, title = when (selectedLanguage) {
                         "Urdu" -> "ایپ شیئر کریں"
                         "Arabic" -> "شارك التطبيق"
                         else -> "Share App"
-                    },
-                    subtitle = when (selectedLanguage) {
+                    }, subtitle = when (selectedLanguage) {
                         "Urdu" -> "ایپ اپنے دوستوں کے ساتھ شیئر کریں"
                         "Arabic" -> "شارك التطبيق مع الأصدقاء والعائلة"
                         else -> "Share app with friends and family"
                     }, onClick = {
                         context.startActivity(shareIntent)
-                    }
+                    }, selectedLanguage = selectedLanguage
                 )
 
 
                 RowWithIcon(
-                    icon = Icons.Outlined.ThumbUp,
-                    title = when (selectedLanguage) {
+                    icon = Icons.Outlined.ThumbUp, title = when (selectedLanguage) {
                         "Urdu" -> "ہمیں ریٹ کریں"
                         "Arabic" -> "قيمنا"
                         else -> "Rate Us"
-                    },
-                    subtitle = when (selectedLanguage) {
+                    }, subtitle = when (selectedLanguage) {
                         "Urdu" -> "براہ کرم ہماری ایپ کو ریٹ کریں"
                         "Arabic" -> "يرجى تقييم تطبيقنا"
                         else -> "Please rate our app"
                     }, onClick = {
                         rate = true
-                    }
+                    }, selectedLanguage = selectedLanguage
                 )
 
 
                 RowWithIcon(
-                    icon = Icons.Outlined.PrivacyTip,
-                    title = when (selectedLanguage) {
+                    icon = Icons.Outlined.PrivacyTip, title = when (selectedLanguage) {
                         "Urdu" -> "پرائیویسی پالیسی"
                         "Arabic" -> "سياسة الخصوصية"
                         else -> "Privacy Policy"
-                    },
-                    subtitle = when (selectedLanguage) {
+                    }, subtitle = when (selectedLanguage) {
                         "Urdu" -> "ہماری پرائیویسی پالیسی پڑھیں"
                         "Arabic" -> "يرجى قراءة سياسة الخصوصية الخاصة بنا"
                         else -> "Read our privacy policy carefully"
-                    }
+                    }, selectedLanguage = selectedLanguage
                 )
 
                 RowWithIcon(
-                    icon = Icons.Outlined.AddRoad,
-                    title = when (selectedLanguage) {
+                    icon = Icons.Outlined.AddRoad, title = when (selectedLanguage) {
                         "Urdu" -> "شرائط و ضوابط"
                         "Arabic" -> "الشروط والأحكام"
                         else -> "Terms & Conditions"
-                    },
-                    subtitle = when (selectedLanguage) {
+                    }, subtitle = when (selectedLanguage) {
                         "Urdu" -> "ہماری شرائط و ضوابط پڑھیں"
                         "Arabic" -> "يرجى قراءة الشروط والأحكام"
                         else -> "Read our terms & conditions carefully"
-                    }
+                    }, selectedLanguage = selectedLanguage
                 )
 
 
                 RowWithIcon(
-                    icon = Icons.Outlined.Info,
-                    title = when (selectedLanguage) {
+                    icon = Icons.Outlined.Info, title = when (selectedLanguage) {
                         "Urdu" -> "ورژن: 1.0.1"
                         "Arabic" -> "الإصدار: 1.0.1"
                         else -> "Version: 1.0.1"
-                    },
-                    subtitle = null
+                    }, selectedLanguage = selectedLanguage, subtitle = null
                 )
             }
 
             if (rate) {
                 var selectedRating by remember { mutableStateOf(0) }
-                AlertDialog(
-                    onDismissRequest = { rate = false },
-                    title = {
+                AlertDialog(onDismissRequest = { rate = false }, title = {
+                    Text(
+                        text = when (selectedLanguage) {
+                            "Urdu" -> "ہمیں ریٹ کریں"
+                            "Arabic" -> "قيمنا"
+                            else -> "Rate Us"
+                        }, fontWeight = FontWeight.Bold, fontSize = 20.sp
+                    )
+                }, text = {
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
                         Text(
                             text = when (selectedLanguage) {
-                                "Urdu" -> "ہمیں ریٹ کریں"
-                                "Arabic" -> "قيمنا"
-                                else -> "Rate Us"
-                            },
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 20.sp
+                                "Urdu" -> "براہ کرم ہماری ایپ کو ریٹ کریں"
+                                "Arabic" -> "يرجى تقييم تطبيقنا"
+                                else -> "Please rate our app"
+                            }
                         )
-                    },
-                    text = {
-                        Column(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalArrangement = Arrangement.spacedBy(8.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                text = when (selectedLanguage) {
-                                    "Urdu" -> "براہ کرم ہماری ایپ کو ریٹ کریں"
-                                    "Arabic" -> "يرجى تقييم تطبيقنا"
-                                    else -> "Please rate our app"
-                                }
-                            )
 
-                            Row(
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                for (i in 1..5) {
-                                    Icon(
-                                        imageVector = if (i <= selectedRating) Icons.Outlined.Star else Icons.Outlined.StarOutline,
-                                        contentDescription = null,
-                                        modifier = Modifier
-                                            .size(40.dp)
-                                            .clickable {
-                                                selectedRating = i
-                                            },
-                                        tint = Color(0XFFFFC107)
-                                    )
-                                }
-                            }
-                        }
-                    },
-                    confirmButton = {
-                        Button(
-                            onClick = {
-                                rate = false
-                            }
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text(
-                                text = when (selectedLanguage) {
-                                    "Urdu" -> "جمع کروائیں"
-                                    "Arabic" -> "إرسال"
-                                    else -> "Submit"
-                                }
-                            )
-                        }
-                    },
-                    dismissButton = {
-                        TextButton(onClick = { rate = false }) {
-                            Text(
-                                text = when (selectedLanguage) {
-                                    "Urdu" -> "منسوخ کریں"
-                                    "Arabic" -> "إلغاء"
-                                    else -> "Cancel"
-                                }
-                            )
+                            for (i in 1..5) {
+                                Icon(
+                                    imageVector = if (i <= selectedRating) Icons.Outlined.Star else Icons.Outlined.StarOutline,
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .size(40.dp)
+                                        .clickable {
+                                            selectedRating = i
+                                        },
+                                    tint = Color(0XFFFFC107)
+                                )
+                            }
                         }
                     }
-                )
+                }, confirmButton = {
+                    Button(onClick = {
+                        rate = false
+                    }) {
+                        Text(
+                            text = when (selectedLanguage) {
+                                "Urdu" -> "جمع کروائیں"
+                                "Arabic" -> "إرسال"
+                                else -> "Submit"
+                            }
+                        )
+                    }
+                }, dismissButton = {
+                    TextButton(onClick = { rate = false }) {
+                        Text(
+                            text = when (selectedLanguage) {
+                                "Urdu" -> "منسوخ کریں"
+                                "Arabic" -> "إلغاء"
+                                else -> "Cancel"
+                            }
+                        )
+                    }
+                })
             }
 
 
 
             if (showLanguageDialog) {
-                LanguageSelectionDialog(
-                    selectedLanguage = selectedLanguage,
+                LanguageSelectionDialog(selectedLanguage = selectedLanguage,
                     onLanguageSelected = { selected ->
                         selectedLanguage = selected
                         sharedPreferences.edit().putString("selectedLanguage", selectedLanguage)
                             .apply()
-                        showLanguageDialog = false
                         onLanguageChanged(selected)
                     },
-                    onDismissRequest = { showLanguageDialog = false }
-                )
+                    onDismissRequest = { showLanguageDialog = false })
             }
         }
     }
@@ -335,7 +302,8 @@ fun RowWithIcon(
     icon: ImageVector,
     title: String,
     subtitle: String?,
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
+    selectedLanguage: String
 ) {
     Row(
         modifier = Modifier
@@ -354,10 +322,8 @@ fun RowWithIcon(
                 modifier = Modifier
                     .size(40.dp)
                     .border(
-                        BorderStroke(1.dp, Color.LightGray),
-                        shape = RoundedCornerShape(8.dp)
-                    ),
-                contentAlignment = Alignment.Center
+                        BorderStroke(1.dp, Color.LightGray), shape = RoundedCornerShape(8.dp)
+                    ), contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = icon,
@@ -393,7 +359,16 @@ fun RowWithIcon(
             imageVector = Icons.Outlined.ArrowForwardIos,
             contentDescription = null,
             tint = Color.LightGray,
-            modifier = Modifier.size(20.dp)
+            modifier = Modifier
+                .size(20.dp)
+                .rotate(
+                    when (selectedLanguage) {
+                        "Urdu" -> 180f
+                        "Arabic" -> 180f
+                        else -> 0f
+                    }
+
+                )
         )
     }
 }
@@ -401,47 +376,33 @@ fun RowWithIcon(
 
 @Composable
 fun LanguageSelectionDialog(
-    selectedLanguage: String,
-    onLanguageSelected: (String) -> Unit,
-    onDismissRequest: () -> Unit
+    selectedLanguage: String, onLanguageSelected: (String) -> Unit, onDismissRequest: () -> Unit
 ) {
     val languages = listOf("English", "Urdu", "Arabic", "Other")
 
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
-        title = {
-            Text(text = "Select Language", fontWeight = FontWeight.Bold, fontSize = 18.sp)
-        },
-        text = {
-            Column {
-                languages.forEach { language ->
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .selectable(
-                                selected = (language == selectedLanguage),
-                                onClick = { onLanguageSelected(language) }
-                            )
-                            .padding(8.dp)
-                    ) {
-                        RadioButton(
-                            selected = (language == selectedLanguage),
-                            onClick = { onLanguageSelected(language) }
-                        )
-                        Text(
-                            text = language,
-                            modifier = Modifier.padding(start = 8.dp)
-                        )
-                    }
+    AlertDialog(onDismissRequest = onDismissRequest, title = {
+        Text(text = "Select Language", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+    }, text = {
+        Column {
+            languages.forEach { language ->
+                Row(verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .selectable(selected = (language == selectedLanguage),
+                            onClick = { onLanguageSelected(language) })
+                        .padding(8.dp)) {
+                    RadioButton(selected = (language == selectedLanguage),
+                        onClick = { onLanguageSelected(language) })
+                    Text(
+                        text = language, modifier = Modifier.padding(start = 8.dp)
+                    )
                 }
             }
-        },
-        confirmButton = {
-            TextButton(onClick = onDismissRequest) {
-                Text("OK")
-            }
         }
-    )
+    }, confirmButton = {
+        TextButton(onClick = onDismissRequest) {
+            Text("OK")
+        }
+    })
 }
 
