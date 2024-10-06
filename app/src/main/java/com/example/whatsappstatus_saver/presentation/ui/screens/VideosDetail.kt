@@ -26,7 +26,7 @@ import androidx.navigation.NavController
 import java.io.File
 
 @Composable
-fun VideoDetail(navController: NavController, videoPath: String) {
+fun VideoDetail(navController: NavController, videoPath: String, selectedLanguage: String) {
     val context = LocalContext.current
     val videoFile = remember { File(videoPath) }
     val exoPlayer = remember {

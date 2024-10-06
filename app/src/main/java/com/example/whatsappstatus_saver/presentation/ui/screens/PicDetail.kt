@@ -1,11 +1,9 @@
 package com.example.whatsappstatus_saver.presentation.ui.screens
 
-import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Environment
-import android.provider.MediaStore
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -27,7 +25,7 @@ import coil.compose.AsyncImage
 import java.io.File
 
 @Composable
-fun PicDetail(navController: NavController, PicPath: String) {
+fun PicDetail(navController: NavController, PicPath: String, selectedLanguage: String) {
     val context = LocalContext.current
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
