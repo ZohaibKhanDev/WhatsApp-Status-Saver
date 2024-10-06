@@ -70,12 +70,15 @@ fun Navigation(navController: NavHostController) {
     }
 }
 
+
+
 sealed class Screens(
     val route: String,
     val title: String,
     val selectedIcon: ImageVector,
     val unSelectedIcon: ImageVector
 ) {
+
     object ImagesScreen : Screens(
         "Images", "Images", selectedIcon = Icons.Filled.Image, unSelectedIcon = Icons.Outlined.Image
     )

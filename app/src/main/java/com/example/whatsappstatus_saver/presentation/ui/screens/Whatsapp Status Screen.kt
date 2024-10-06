@@ -1,5 +1,6 @@
 package com.example.whatsappstatus_saver.presentation.ui.screens
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -20,10 +21,15 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -44,11 +50,17 @@ fun WhatsAppStatusScreen(navController: NavController) {
         permissionState.launchPermissionRequest()
     }
 
+    val context = LocalContext.current
+    val sharedPreferences = context.getSharedPreferences("Settings", Context.MODE_PRIVATE)
+    var selectedLanguage by remember {
+        mutableStateOf(sharedPreferences.getString("selectedLanguage", "English") ?: "English")
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(title = {
                 Text(
-                    text = "Status Images",
+                    text = if (selectedLanguage == "Urdu") "اسٹیٹس امیجز" else "Status Images",
                     color = Color.White,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Medium

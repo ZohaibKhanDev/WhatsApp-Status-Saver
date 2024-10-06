@@ -80,6 +80,10 @@ fun Videos(navController: NavController) {
     var isLoading by remember { mutableStateOf(true) }
 
     val context = LocalContext.current
+    val sharedPreferences = context.getSharedPreferences("Settings", Context.MODE_PRIVATE)
+    var selectedLanguage by remember {
+        mutableStateOf(sharedPreferences.getString("selectedLanguage", "English") ?: "English")
+    }
 
     LaunchedEffect(Unit) {
         isLoading = true
@@ -107,7 +111,7 @@ fun Videos(navController: NavController) {
         topBar = {
             TopAppBar(title = {
                 Text(
-                    text = "Status Videos",
+                    text = if (selectedLanguage == "Urdu") "اسٹیٹس ویڈیوز" else "Status Images",
                     color = Color.White,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Medium
