@@ -61,6 +61,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.whatsappstatus_saver.presentation.ui.navigation.Screens
 
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -190,7 +191,9 @@ fun SettingScreen(
                         "Urdu" -> "ہماری پرائیویسی پالیسی پڑھیں"
                         "Arabic" -> "يرجى قراءة سياسة الخصوصية الخاصة بنا"
                         else -> "Read our privacy policy carefully"
-                    }, selectedLanguage = selectedLanguage
+                    }, selectedLanguage = selectedLanguage, onClick = {
+                        navController.navigate(Screens.Privacy_Policy.route)
+                    }
                 )
 
                 RowWithIcon(

@@ -2,6 +2,8 @@ package com.example.whatsappstatus_saver.presentation.ui.navigation
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Image
@@ -36,12 +38,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.whatsappstatus_saver.presentation.ui.screens.PicDetail
+import com.example.whatsappstatus_saver.presentation.ui.screens.Privacy_Policy
 import com.example.whatsappstatus_saver.presentation.ui.screens.Saved
 import com.example.whatsappstatus_saver.presentation.ui.screens.SettingScreen
 import com.example.whatsappstatus_saver.presentation.ui.screens.VideoDetail
 import com.example.whatsappstatus_saver.presentation.ui.screens.Videos
 import com.example.whatsappstatus_saver.presentation.ui.screens.WhatsAppStatusScreen
 
+@RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 @Composable
 fun Navigation(
     navController: NavHostController,
@@ -78,10 +82,12 @@ fun Navigation(
                 PicDetail(navController = navController, PicPath, selectedLanguage)
             }
         }
+
+        composable(Screens.Privacy_Policy.route) {
+            Privacy_Policy(navController = navController)
+        }
     }
 }
-
-
 
 
 sealed class Screens(
@@ -113,6 +119,10 @@ sealed class Screens(
         "PicDetail", Icons.Filled.Settings, Icons.Outlined.Settings
     )
 
+    object Privacy_Policy : Screens(
+        "Privacy_Policy", Icons.Filled.Settings, Icons.Outlined.Settings
+    )
+
     fun getTitle(language: String): String {
         return when (this) {
             is ImagesScreen -> when (language) {
@@ -120,35 +130,47 @@ sealed class Screens(
                 "Arabic" -> "صور"
                 else -> "Images"
             }
+
             is VideosScreen -> when (language) {
                 "Urdu" -> "ویڈیوز"
                 "Arabic" -> "فيديوهات"
                 else -> "Videos"
             }
+
             is Saved -> when (language) {
                 "Urdu" -> "محفوظ شدہ"
                 "Arabic" -> "المحفوظات"
                 else -> "Saved"
             }
+
             is SettingScreen -> when (language) {
                 "Urdu" -> "ترتیبات"
                 "Arabic" -> "الإعدادات"
                 else -> "Settings"
             }
+
             is VideoDetail -> when (language) {
                 "Urdu" -> "ویڈیو کی تفصیل"
                 "Arabic" -> "تفاصيل الفيديو"
                 else -> "Video Detail"
             }
+
             is PicDetail -> when (language) {
                 "Urdu" -> "تصویر کی تفصیل"
                 "Arabic" -> "تفاصيل الصورة"
                 else -> "Picture Detail"
             }
+
+            Privacy_Policy -> when (language) {
+                "Urdu" -> "رازداری کی پالیسی"
+                "Arabic" -> "سياسة الخصوصية"
+                else -> "Privacy Policy"
+            }
         }
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -173,29 +195,38 @@ fun NavEntry() {
         currentRoute == null -> true
         currentRoute.startsWith(Screens.VideoDetail.route) -> false
         currentRoute.startsWith(Screens.PicDetail.route) -> false
+        currentRoute.startsWith(Screens.Privacy_Policy.route) -> false
         else -> true
     }
 
     Scaffold(
         bottomBar = {
             if (showBottomNav) {
-                BottomNavigation(navController = navController, selectedLanguage, onLanguageChanged = { newLanguage ->
-                    selectedLanguage = newLanguage
-                })
+                BottomNavigation(
+                    navController = navController,
+                    selectedLanguage,
+                    onLanguageChanged = { newLanguage ->
+                        selectedLanguage = newLanguage
+                    })
             }
         }
     ) {
-        Navigation(navController = navController, selectedLanguage, onLanguageChanged = { newLanguage ->
-            selectedLanguage = newLanguage
-        })
+        Navigation(
+            navController = navController,
+            selectedLanguage,
+            onLanguageChanged = { newLanguage ->
+                selectedLanguage = newLanguage
+            })
     }
 }
 
 
-
-
 @Composable
-fun BottomNavigation(navController: NavController, selectedLanguage: String, onLanguageChanged: (String) -> Unit) {
+fun BottomNavigation(
+    navController: NavController,
+    selectedLanguage: String,
+    onLanguageChanged: (String) -> Unit
+) {
     val item = listOf(
         Screens.ImagesScreen,
         Screens.VideosScreen,
@@ -220,7 +251,11 @@ fun BottomNavigation(navController: NavController, selectedLanguage: String, onL
                 },
                 icon = {
                     if (current == it.route) {
-                        Icon(imageVector = it.selectedIcon, contentDescription = "", tint = Color.White)
+                        Icon(
+                            imageVector = it.selectedIcon,
+                            contentDescription = "",
+                            tint = Color.White
+                        )
                     } else {
                         Icon(
                             imageVector = it.unSelectedIcon,
