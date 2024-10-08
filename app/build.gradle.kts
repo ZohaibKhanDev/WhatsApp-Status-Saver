@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
 }
 
+
 android {
     namespace = "com.example.whatsappstatus_saver"
     compileSdk = 34
@@ -11,7 +12,7 @@ android {
         applicationId = "com.example.whatsappstatus_saver"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
+        versionCode = 1 
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
