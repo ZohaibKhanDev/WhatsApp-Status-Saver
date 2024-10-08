@@ -247,7 +247,8 @@ fun CustomSplashScreen(onSplashEnd: () -> Unit) {
             CircularProgressIndicator(
                 modifier = Modifier.size(40.dp),
                 color = Color.White,
-                strokeWidth = 4.dp
+                strokeWidth = 4.dp,
+                trackColor = Color.Red
             )
         }
     }
