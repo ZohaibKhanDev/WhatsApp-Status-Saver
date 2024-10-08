@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
@@ -93,15 +94,16 @@ fun SettingScreen(
     val shareIntent = Intent.createChooser(sendIntent, null)
     CompositionLocalProvider(LocalLayoutDirection provides layoutDirection) {
         Scaffold(topBar = {
-            TopAppBar(title = {
-                Text(
-                    text = when (selectedLanguage) {
-                        "Urdu" -> "ترتیبات"
-                        "Arabic" -> "الإعدادات"
-                        else -> "Settings"
-                    }, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp
-                )
-            },
+            TopAppBar(
+                title = {
+                    Text(
+                        text = when (selectedLanguage) {
+                            "Urdu" -> "ترتیبات"
+                            "Arabic" -> "الإعدادات"
+                            else -> "Settings"
+                        }, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
@@ -258,6 +260,11 @@ fun SettingScreen(
                 }, confirmButton = {
                     Button(onClick = {
                         rate = false
+                        Toast.makeText(
+                            context,
+                            "You submitted $selectedRating Stars",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }) {
                         Text(
                             text = when (selectedLanguage) {
@@ -376,33 +383,58 @@ fun RowWithIcon(
 
 @Composable
 fun LanguageSelectionDialog(
-    selectedLanguage: String, onLanguageSelected: (String) -> Unit, onDismissRequest: () -> Unit
+    selectedLanguage: String,
+    onLanguageSelected: (String) -> Unit,
+    onDismissRequest: () -> Unit
 ) {
+    var tempSelectedLanguage by remember { mutableStateOf(selectedLanguage) }
+
     val languages = listOf("English", "Urdu", "Arabic", "Other")
 
-    AlertDialog(onDismissRequest = onDismissRequest, title = {
-        Text(text = "Select Language", fontWeight = FontWeight.Bold, fontSize = 18.sp)
-    }, text = {
-        Column {
-            languages.forEach { language ->
-                Row(verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .selectable(selected = (language == selectedLanguage),
-                            onClick = { onLanguageSelected(language) })
-                        .padding(8.dp)) {
-                    RadioButton(selected = (language == selectedLanguage),
-                        onClick = { onLanguageSelected(language) })
-                    Text(
-                        text = language, modifier = Modifier.padding(start = 8.dp)
-                    )
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
+        title = {
+            Text(text = "Select Language", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+        },
+        text = {
+            Column {
+                languages.forEach { language ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .selectable(
+                                selected = (language == tempSelectedLanguage),
+                                onClick = { tempSelectedLanguage = language }
+                            )
+                            .padding(8.dp)
+                    ) {
+                        RadioButton(
+                            selected = (language == tempSelectedLanguage),
+                            onClick = { tempSelectedLanguage = language }
+                        )
+                        Text(
+                            text = language,
+                            modifier = Modifier.padding(start = 8.dp)
+                        )
+                    }
                 }
             }
+        },
+        confirmButton = {
+            TextButton(onClick = {
+                onLanguageSelected(tempSelectedLanguage)
+                onDismissRequest()
+            }) {
+                Text("OK")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismissRequest) {
+                Text("Cancel")
+            }
         }
-    }, confirmButton = {
-        TextButton(onClick = onDismissRequest) {
-            Text("OK")
-        }
-    })
+    )
 }
+
 
