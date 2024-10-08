@@ -77,5 +77,5 @@ dependencies {
     implementation("androidx.media3:media3-exoplayer-dash:1.1.0")
     implementation("androidx.media3:media3-exoplayer-hls:1.1.0")
     implementation("io.coil-kt:coil-compose:2.7.0")
-
+    implementation ("com.android.billingclient:billing:6.0.1")
 }
