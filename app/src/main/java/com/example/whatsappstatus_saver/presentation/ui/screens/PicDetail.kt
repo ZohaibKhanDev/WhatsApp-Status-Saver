@@ -60,6 +60,7 @@ fun PicDetail(navController: NavController, PicPath: String, selectedLanguage: S
     }
 }
 
+
 fun downloadImage(context: Context, file: File) {
     try {
         val downloadsFolder = File(
@@ -80,3 +81,4 @@ fun downloadImage(context: Context, file: File) {
         Toast.makeText(context, "Failed to download image", Toast.LENGTH_SHORT).show()
     }
 }
+
