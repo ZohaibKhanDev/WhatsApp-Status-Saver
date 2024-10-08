@@ -42,6 +42,7 @@ import java.io.File
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DisplayWhatsAppStatuses(navController: NavController) {
+
     val statuses = remember { mutableStateListOf<File>() }
 
     LaunchedEffect(Unit) {
