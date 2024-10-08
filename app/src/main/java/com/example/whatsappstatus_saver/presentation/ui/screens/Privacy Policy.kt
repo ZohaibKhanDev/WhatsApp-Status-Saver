@@ -150,7 +150,6 @@ fun ExpandableSection(
                 .padding(8.dp)
         )
 
-
         if (isExpanded) {
             for (item in content) {
                 Text(
@@ -162,4 +161,3 @@ fun ExpandableSection(
         }
     }
 }
-
