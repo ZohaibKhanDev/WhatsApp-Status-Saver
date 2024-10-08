@@ -253,3 +253,4 @@ fun CustomSplashScreen(onSplashEnd: () -> Unit) {
         }
     }
 }
+
