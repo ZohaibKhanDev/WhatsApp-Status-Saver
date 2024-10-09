@@ -126,8 +126,11 @@ fun WhatsAppStatusScreen(navController: NavController, selectedLanguage: String)
             )
         },
         content = { paddingValues ->
+
             if (permissionState.status.isGranted) {
+
                 DisplayWhatsAppStatuses(navController)
+
             } else {
                 Box(
                     modifier = Modifier
@@ -200,3 +203,4 @@ fun showPremiumFeatureDialog(context: Context, onDismiss: () -> Unit) {
         }
     )
 }
+
