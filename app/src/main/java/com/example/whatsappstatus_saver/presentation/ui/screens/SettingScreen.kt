@@ -91,7 +91,8 @@ fun SettingScreen(
         putExtra(Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=$pakagename")
         type = "text/plain"
     }
-    val deviceId = context.applicationInfo.gwpAsanMode
+    val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+    val appVersion = packageInfo.versionName
     val shareIntent = Intent.createChooser(sendIntent, null)
     CompositionLocalProvider(LocalLayoutDirection provides layoutDirection) {
         Scaffold(topBar = {
@@ -213,9 +214,9 @@ fun SettingScreen(
 
                 RowWithIcon(
                     icon = Icons.Outlined.Info, title = when (selectedLanguage) {
-                        "Urdu" -> "ورژن: 1.0.1"
-                        "Arabic" -> "الإصدار: 1.0.1"
-                        else -> "Version: 1.0.1"
+                        "Urdu" -> "ورژن: $appVersion"
+                        "Arabic" -> "الإصدار: $appVersion"
+                        else -> "Version: $appVersion"
                     }, selectedLanguage = selectedLanguage, subtitle = null
                 )
             }
@@ -292,8 +293,6 @@ fun SettingScreen(
                 })
             }
 
-
-
             if (showLanguageDialog) {
                 LanguageSelectionDialog(selectedLanguage = selectedLanguage,
                     onLanguageSelected = { selected ->
@@ -307,7 +306,6 @@ fun SettingScreen(
         }
     }
 }
-
 
 @Composable
 fun RowWithIcon(
