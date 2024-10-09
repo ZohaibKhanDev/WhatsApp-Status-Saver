@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -22,6 +23,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.StarBorder
 import androidx.compose.material.icons.outlined.AddRoad
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.ArrowForwardIos
@@ -34,6 +37,7 @@ import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -52,6 +56,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -222,75 +227,90 @@ fun SettingScreen(
             }
 
             if (rate) {
+                val starSize = 40.dp
+                val starColor = Color(0XFFFFC107)
                 var selectedRating by remember { mutableStateOf(0) }
-                AlertDialog(onDismissRequest = { rate = false }, title = {
-                    Text(
-                        text = when (selectedLanguage) {
-                            "Urdu" -> "ہمیں ریٹ کریں"
-                            "Arabic" -> "قيمنا"
-                            else -> "Rate Us"
-                        }, fontWeight = FontWeight.Bold, fontSize = 20.sp
-                    )
-                }, text = {
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
+                AlertDialog(
+                    onDismissRequest = { rate = false },
+                    title = {
                         Text(
                             text = when (selectedLanguage) {
-                                "Urdu" -> "براہ کرم ہماری ایپ کو ریٹ کریں"
-                                "Arabic" -> "يرجى تقييم تطبيقنا"
-                                else -> "Please rate our app"
-                            }
+                                "Urdu" -> "ہمیں ریٹ کریں"
+                                "Arabic" -> "قيمنا"
+                                else -> "Rate Us"
+                            },
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp
                         )
-
-                        Row(
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically
+                    },
+                    text = {
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalArrangement = Arrangement.spacedBy(16.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            for (i in 1..5) {
-                                Icon(
-                                    imageVector = if (i <= selectedRating) Icons.Outlined.Star else Icons.Outlined.StarOutline,
-                                    contentDescription = null,
-                                    modifier = Modifier
-                                        .size(40.dp)
-                                        .clickable {
-                                            selectedRating = i
-                                        },
-                                    tint = Color(0XFFFFC107)
-                                )
+                            Text(
+                                text = when (selectedLanguage) {
+                                    "Urdu" -> "براہ کرم ہماری ایپ کو ریٹ کریں"
+                                    "Arabic" -> "يرجى تقييم تطبيقنا"
+                                    else -> "Please rate our app"
+                                },
+                                fontSize = 16.sp,
+                                color = Color.Gray
+                            )
+
+                            Row(
+                                horizontalArrangement = Arrangement.Center,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                for (i in 1..5) {
+                                    val isSelected = i <= selectedRating
+                                    Icon(
+                                        imageVector = if (isSelected) Icons.Filled.Star else Icons.Filled.StarBorder,
+                                        modifier = Modifier
+                                            .size(40.dp)
+                                            .clickable { selectedRating = i }
+                                            .scale(if (isSelected) 1.2f else 1f)
+                                            .animateContentSize(),
+                                        contentDescription = null,
+                                        tint = if (isSelected) starColor else Color.LightGray
+                                    )
+                                }
                             }
                         }
-                    }
-                }, confirmButton = {
-                    Button(onClick = {
-                        rate = false
-                        Toast.makeText(
-                            context,
-                            "You submitted $selectedRating Stars",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }) {
-                        Text(
-                            text = when (selectedLanguage) {
-                                "Urdu" -> "جمع کروائیں"
-                                "Arabic" -> "إرسال"
-                                else -> "Submit"
-                            }
-                        )
-                    }
-                }, dismissButton = {
-                    TextButton(onClick = { rate = false }) {
-                        Text(
-                            text = when (selectedLanguage) {
-                                "Urdu" -> "منسوخ کریں"
-                                "Arabic" -> "إلغاء"
-                                else -> "Cancel"
-                            }
-                        )
-                    }
-                })
+                    },
+                    confirmButton = {
+                        Button(
+                            onClick = {
+                                rate = false
+                                Toast.makeText(context, "Rate Submit", Toast.LENGTH_SHORT).show()
+                            },
+                            enabled = selectedRating > 0,
+                            colors = ButtonDefaults.buttonColors(containerColor = Color.Blue)
+                        ) {
+                            Text(
+                                text = when (selectedLanguage) {
+                                    "Urdu" -> "جمع کروائیں"
+                                    "Arabic" -> "إرسال"
+                                    else -> "Submit"
+                                },
+                                color = Color.White
+                            )
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { rate = false }) {
+                            Text(
+                                text = when (selectedLanguage) {
+                                    "Urdu" -> "منسوخ کریں"
+                                    "Arabic" -> "إلغاء"
+                                    else -> "Cancel"
+                                }
+                            )
+                        }
+                    },
+                    shape = RoundedCornerShape(16.dp)
+                )
             }
 
             if (showLanguageDialog) {
