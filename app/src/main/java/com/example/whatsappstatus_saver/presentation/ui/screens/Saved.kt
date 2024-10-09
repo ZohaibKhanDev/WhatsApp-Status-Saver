@@ -2,6 +2,8 @@ package com.example.whatsappstatus_saver.presentation.ui.screens
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Bitmap
+import android.media.MediaMetadataRetriever
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -113,7 +115,9 @@ fun Saved(navController: NavController, selectedLanguage: String) {
                                 modifier = Modifier.fillMaxSize()
                             )
                         } else if (file.extension == "mp4") {
-                            val thumbnail = loadVideoThumbnail(file)
+                            val thumbnail = remember(filePath) {
+                                loadVideoThumbnail(file)
+                            }
                             if (thumbnail != null) {
                                 Image(
                                     bitmap = thumbnail.asImageBitmap(),
