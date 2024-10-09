@@ -26,7 +26,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -41,7 +40,7 @@ import com.example.whatsappstatus_saver.presentation.ui.screens.PicDetail
 import com.example.whatsappstatus_saver.presentation.ui.screens.Privacy_Policy
 import com.example.whatsappstatus_saver.presentation.ui.screens.Saved
 import com.example.whatsappstatus_saver.presentation.ui.screens.SettingScreen
-import com.example.whatsappstatus_saver.presentation.ui.screens.Terms_Condition
+import com.example.whatsappstatus_saver.presentation.ui.screens.TermsConditionScreen
 import com.example.whatsappstatus_saver.presentation.ui.screens.VideoDetail
 import com.example.whatsappstatus_saver.presentation.ui.screens.Videos
 import com.example.whatsappstatus_saver.presentation.ui.screens.WhatsAppStatusScreen
@@ -88,7 +87,7 @@ fun Navigation(
             Privacy_Policy(navController = navController)
         }
         composable(Screens.TermsScreen.route) {
-            Terms_Condition(navController)
+            TermsConditionScreen(navController)
         }
     }
 }
