@@ -257,7 +257,11 @@ fun downloadVideo(context: Context, file: File) {
             file.name
         )
         file.copyTo(downloadsFolder, overwrite = true)
+
+        saveFileToPreferences(context, downloadsFolder.absolutePath)
+
         Toast.makeText(context, "Video saved to Downloads", Toast.LENGTH_SHORT).show()
+
         val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
         intent.data = Uri.fromFile(downloadsFolder)
         context.sendBroadcast(intent)
@@ -273,6 +277,23 @@ fun loadVideoThumbnail(file: File): Bitmap? {
         file.path, MediaStore.Images.Thumbnails.MINI_KIND
     )
 }
+
+
+fun saveFileToPreferences(context: Context, filePath: String) {
+    val sharedPreferences = context.getSharedPreferences("SavedMedia", Context.MODE_PRIVATE)
+    val editor = sharedPreferences.edit()
+
+    val savedFiles = sharedPreferences.getStringSet("savedFiles", mutableSetOf()) ?: mutableSetOf()
+    savedFiles.add(filePath)
+    editor.putStringSet("savedFiles", savedFiles)
+    editor.apply()
+}
+
+fun getSavedFilesFromPreferences(context: Context): Set<String> {
+    val sharedPreferences = context.getSharedPreferences("SavedMedia", Context.MODE_PRIVATE)
+    return sharedPreferences.getStringSet("savedFiles", mutableSetOf()) ?: mutableSetOf()
+}
+
 
 
 @SuppressLint("DefaultLocale")

@@ -67,8 +67,10 @@ fun downloadImage(context: Context, file: File) {
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
             file.name
         )
-
         file.copyTo(downloadsFolder, overwrite = true)
+
+
+        saveFileToPreferences(context, downloadsFolder.absolutePath)
 
         Toast.makeText(context, "Image saved to Downloads", Toast.LENGTH_SHORT).show()
 
