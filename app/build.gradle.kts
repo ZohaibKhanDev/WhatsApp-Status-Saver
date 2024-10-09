@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
 }
 
-
 android {
     namespace = "com.example.whatsappstatus_saver"
     compileSdk = 34
