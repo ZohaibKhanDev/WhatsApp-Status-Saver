@@ -169,7 +169,6 @@ fun WhatsAppStatusScreen(navController: NavController, selectedLanguage: String)
     )
 }
 
-
 @Composable
 fun showPremiumFeatureDialog(context: Context, onDismiss: () -> Unit) {
     AlertDialog(
@@ -203,4 +202,3 @@ fun showPremiumFeatureDialog(context: Context, onDismiss: () -> Unit) {
         }
     )
 }
-
