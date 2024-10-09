@@ -94,8 +94,11 @@ class MainActivity : ComponentActivity() {
                     CustomSplashScreen {
                         showSplash = false
                     }
+
                 } else {
+
                     NavEntry()
+
                 }
             }
         }
