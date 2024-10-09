@@ -205,7 +205,9 @@ fun SettingScreen(
                         "Urdu" -> "ہماری شرائط و ضوابط پڑھیں"
                         "Arabic" -> "يرجى قراءة الشروط والأحكام"
                         else -> "Read our terms & conditions carefully"
-                    }, selectedLanguage = selectedLanguage
+                    }, selectedLanguage = selectedLanguage, onClick = {
+                        navController.navigate(Screens.TermsScreen.route)
+                    }
                 )
 
 

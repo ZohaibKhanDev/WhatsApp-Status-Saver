@@ -41,6 +41,7 @@ import com.example.whatsappstatus_saver.presentation.ui.screens.PicDetail
 import com.example.whatsappstatus_saver.presentation.ui.screens.Privacy_Policy
 import com.example.whatsappstatus_saver.presentation.ui.screens.Saved
 import com.example.whatsappstatus_saver.presentation.ui.screens.SettingScreen
+import com.example.whatsappstatus_saver.presentation.ui.screens.Terms_Condition
 import com.example.whatsappstatus_saver.presentation.ui.screens.VideoDetail
 import com.example.whatsappstatus_saver.presentation.ui.screens.Videos
 import com.example.whatsappstatus_saver.presentation.ui.screens.WhatsAppStatusScreen
@@ -86,6 +87,9 @@ fun Navigation(
         composable(Screens.Privacy_Policy.route) {
             Privacy_Policy(navController = navController)
         }
+        composable(Screens.TermsScreen.route) {
+            Terms_Condition(navController)
+        }
     }
 }
 
@@ -121,6 +125,10 @@ sealed class Screens(
 
     object Privacy_Policy : Screens(
         "Privacy_Policy", Icons.Filled.Settings, Icons.Outlined.Settings
+    )
+
+    object TermsScreen : Screens(
+        "TermsScreen", Icons.Filled.Settings, Icons.Outlined.Settings
     )
 
     fun getTitle(language: String): String {
@@ -166,6 +174,8 @@ sealed class Screens(
                 "Arabic" -> "سياسة الخصوصية"
                 else -> "Privacy Policy"
             }
+
+            TermsScreen -> TODO()
         }
     }
 }
@@ -196,6 +206,7 @@ fun NavEntry() {
         currentRoute.startsWith(Screens.VideoDetail.route) -> false
         currentRoute.startsWith(Screens.PicDetail.route) -> false
         currentRoute.startsWith(Screens.Privacy_Policy.route) -> false
+        currentRoute.startsWith(Screens.TermsScreen.route) -> false
         else -> true
     }
 
