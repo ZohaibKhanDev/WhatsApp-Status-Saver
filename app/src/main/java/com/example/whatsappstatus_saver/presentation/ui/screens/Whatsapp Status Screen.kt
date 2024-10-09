@@ -132,6 +132,7 @@ fun WhatsAppStatusScreen(navController: NavController, selectedLanguage: String)
                 DisplayWhatsAppStatuses(navController)
 
             } else {
+
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
