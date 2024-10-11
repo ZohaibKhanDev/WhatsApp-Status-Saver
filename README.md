@@ -20,4 +20,3 @@ Let's chat about potential projects, job opportunities, or any other collaborati
 | ![Screenshot 10](https://github.com/ZohaibKhanDev/WhatsApp-Status-Saver/blob/master/screenshots/10.png) | ![Screenshot 11](https://github.com/ZohaibKhanDev/WhatsApp-Status-Saver/blob/master/screenshots/11.png) | ![Screenshot 12](https://github.com/ZohaibKhanDev/WhatsApp-Status-Saver/blob/master/screenshots/12.png) |
 | ![Screenshot 13](https://github.com/ZohaibKhanDev/WhatsApp-Status-Saver/blob/master/screenshots/13.png) | ![Screenshot 14](https://github.com/ZohaibKhanDev/WhatsApp-Status-Saver/blob/master/screenshots/14.png) | ![Screenshot 15](https://github.com/ZohaibKhanDev/WhatsApp-Status-Saver/blob/master/screenshots/15.png) |
 | ![Screenshot 16](https://github.com/ZohaibKhanDev/WhatsApp-Status-Saver/blob/master/screenshots/16.png) |
-
