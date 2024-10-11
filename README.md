@@ -4,7 +4,7 @@
 ## 🚀 Key Features
 - ** View and save WhatsApp statuses (photos and videos) **
 - ** Simple and fast status saving process ** 
-- ** Intuitive UI **
+- ** Intuitive UI ** 
 
 ## 🤝 Connect with Me
 Let's chat about potential projects, job opportunities, or any other collaboration! Feel free to connect with me through the following channels:
